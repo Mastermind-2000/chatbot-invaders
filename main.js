@@ -71,25 +71,26 @@ loader.load(
         // Replace stub texture with video texture
         model.traverse(function(child) {
           if (child.isMesh && child.material && child.material.map) {
-            // Check if this material uses the stub texture by name or path
-            if (child.material.map.image && child.material.map.image.currentSrc &&
-                child.material.map.image.currentSrc.indexOf("face_tex.png") !== -1) {
+            // Replace stub texture if it matched "face_tex.png"
+            if (
+              child.material.map.image &&
+              child.material.map.image.currentSrc &&
+              child.material.map.image.currentSrc.indexOf("face_tex.png") !== -1
+            ) {
               child.material.map = idleVideoTexture;
               child.material.needsUpdate = true;
             }
-          }
-          model.traverse(function(child) {
-            if (child.isMesh && child.material && child.material.map) {
-              if (child.material.name === "Mat.028") {
-                child.material.map = idleVideoTexture;
-                child.material.transparent = true;
-                child.material.emissive = new THREE.Color(0xffffff);
-                child.material.emissiveIntensity = 2.0;
-                child.material.needsUpdate = true;
-                console.log(child.material.name + " texture replaced with video texture.");
-              }
+        
+            // If it's Mat.028 (eye material), assign video texture and emissive glow
+            if (child.material.name === "Mat.028") {
+              child.material.map = idleVideoTexture;
+              child.material.transparent = true;
+              child.material.emissive = new THREE.Color(0xffffff);
+              child.material.emissiveIntensity = 2.0;
+              child.material.needsUpdate = true;
+              console.log(child.material.name + " texture replaced with video texture.");
             }
-          });
+          }
         });
   },
   undefined,
@@ -101,6 +102,60 @@ loader.load(
 
 // Position the camera
 camera.position.set(0, 0, 12);
+
+//Character states
+function setCharacterState(state) {
+  const idleVideo = document.getElementById('Idle_eyes');
+  const thinkingVideo = document.getElementById('Thinking_eyes');
+  const talkingVideo = document.getElementById('Talking_eyes');
+
+  // Pause all videos first
+  idleVideo.pause();
+  thinkingVideo.pause();
+  talkingVideo.pause();
+
+  let selectedVideo, animationName;
+
+  if (state === 'idle') {
+    selectedVideo = idleVideo;
+    animationName = 'Idle';
+  } else if (state === 'thinking') {
+    selectedVideo = thinkingVideo;
+    animationName = 'Thinking';
+  } else if (state === 'talking') {
+    selectedVideo = talkingVideo;
+    animationName = 'Talking';
+  }
+
+  if (selectedVideo) {
+    selectedVideo.currentTime = 0;
+    selectedVideo.play();
+
+    const texture = new THREE.VideoTexture(selectedVideo);
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+    texture.format = THREE.RGBAFormat;
+
+    // Apply to the face material
+    scene.traverse(child => {
+      if (child.isMesh && child.material && child.material.name === "Mat.028") {
+        child.material.map = texture;
+        child.material.needsUpdate = true;
+      }
+    });
+  }
+
+  // Play animation (if model & mixer are loaded)
+  if (window.mixer && window.loadedAnimations) {
+    const clip = THREE.AnimationClip.findByName(window.loadedAnimations, animationName);
+    if (clip) {
+      const action = window.mixer.clipAction(clip);
+      action.reset().fadeIn(0.2).play();
+    }
+  }
+
+  window.currentState = state;
+}
 
 // Animation loop
 function animate() {
@@ -149,3 +204,75 @@ async function sendToWebhook(userInput) {
   const data = await response.json();
   return data.reply; // or whatever structure your webhook returns
 }
+
+// Preload voices if needed
+window.speechSynthesis.onvoiceschanged = () => {
+  speechSynthesis.getVoices();
+};
+
+// Display reply in chat box
+function displayReply(text, sender = 'bot') {
+  const chatMessages = document.getElementById('chat-messages');
+  const msg = document.createElement('div');
+  msg.classList.add('message', sender);
+  msg.textContent = text;
+  chatMessages.appendChild(msg);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+
+  if (sender === 'bot') {
+    setCharacterState("talking");
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ru-RU';
+
+    // Pick a specific Russian voice if available
+    const voices = speechSynthesis.getVoices();
+    const russianVoice = voices.find(voice =>
+      voice.lang === 'ru-RU' && voice.name.includes('Google')
+    );
+    if (russianVoice) {
+      utterance.voice = russianVoice;
+    }
+
+    utterance.onend = () => {
+      setCharacterState("idle");
+    };
+
+    speechSynthesis.speak(utterance);
+  }
+}
+
+
+// Send button click handler
+document.getElementById('send-btn').addEventListener('click', async () => {
+  const input = document.getElementById('chat-input');
+  const userMessage = input.value.trim();
+  if (!userMessage) return;
+
+  displayReply(userMessage, 'user');
+  input.value = "";
+
+  setCharacterState("thinking");
+  const botReply = await sendToWebhook(userMessage);
+  displayReply(botReply, 'bot');
+});
+
+//Voice input
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'en-US';
+recognition.continuous = false;
+
+document.getElementById('mic-btn').addEventListener('click', () => {
+  recognition.start();
+});
+
+recognition.onresult = async (event) => {
+  const voiceInput = event.results[0][0].transcript;
+  displayReply(voiceInput, 'user');
+
+  const botReply = await sendToWebhook(voiceInput);
+  displayReply(botReply, 'bot');
+};
+
+//Get voices list for console
+speechSynthesis.getVoices().forEach(v => console.log(v.name, v.lang));
