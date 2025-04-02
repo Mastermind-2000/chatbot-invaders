@@ -192,17 +192,38 @@ localStorage.setItem("chatSessionId", sessionId);
 
 // Then when sending messages to webhook:
 async function sendToWebhook(userInput) {
-  const response = await fetch("https://n8n-system.onrender.com/webhook/chatbot-webhook", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      message: userInput,
-      sessionId: sessionId  // <- include the same ID
-    })
-  });
-
-  const data = await response.json();
-  return data.reply; // or whatever structure your webhook returns
+  try {
+    const response = await fetch("https://n8n-system.onrender.com/webhook/chatbot-webhook", {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        // You might need to add Origin header if your n8n is configured to check it
+        // "Origin": window.location.origin
+      },
+      body: JSON.stringify({
+        message: userInput,
+        sessionId: sessionId
+      })
+    });
+    
+    if (!response.ok) {
+      throw new Error(`Server responded with status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Check different possible response structures
+    if (data.reply) return data.reply;
+    if (data.response) return data.response;
+    if (data.text) return data.text;
+    if (data.message) return data.message;
+    
+    // If we can't find a known structure, return the whole object as string
+    return JSON.stringify(data);
+  } catch (error) {
+    console.error("Error sending to webhook:", error);
+    throw error; // Re-throw to handle in the calling function
+  }
 }
 
 // Preload voices if needed
@@ -258,21 +279,52 @@ document.getElementById('send-btn').addEventListener('click', async () => {
 });
 
 //Voice input
-const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-recognition.lang = 'en-US';
-recognition.continuous = false;
+let recognition;
+try {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SpeechRecognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-US';
+    recognition.continuous = false;
+    
+    recognition.onresult = async (event) => {
+      const voiceInput = event.results[0][0].transcript;
+      displayReply(voiceInput, 'user');
+      
+      setCharacterState("thinking");
+      try {
+        const botReply = await sendToWebhook(voiceInput);
+        displayReply(botReply, 'bot');
+      } catch (error) {
+        console.error("Error getting bot reply:", error);
+        displayReply("Sorry, I encountered a problem. Please try again.", 'bot');
+        setCharacterState("idle");
+      }
+    };
+    
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error:", event.error);
+      displayReply("Sorry, I couldn't understand that. Please try typing instead.", 'bot');
+      setCharacterState("idle");
+    };
+  } else {
+    document.getElementById('mic-btn').style.display = 'none';
+  }
+} catch (error) {
+  console.error("Speech recognition not supported:", error);
+  document.getElementById('mic-btn').style.display = 'none';
+}
 
+// Update mic button click handler
 document.getElementById('mic-btn').addEventListener('click', () => {
-  recognition.start();
+  if (recognition) {
+    try {
+      recognition.start();
+    } catch (error) {
+      console.error("Error starting recognition:", error);
+    }
+  }
 });
-
-recognition.onresult = async (event) => {
-  const voiceInput = event.results[0][0].transcript;
-  displayReply(voiceInput, 'user');
-
-  const botReply = await sendToWebhook(voiceInput);
-  displayReply(botReply, 'bot');
-};
 
 //Get voices list for console
 speechSynthesis.getVoices().forEach(v => console.log(v.name, v.lang));
