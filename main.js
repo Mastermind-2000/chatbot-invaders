@@ -192,7 +192,7 @@ localStorage.setItem("chatSessionId", sessionId);
 
 // Then when sending messages to webhook:
 async function sendToWebhook(userInput) {
-  const response = await fetch("https://n8n-system.onrender.com/webhook-test/chatbot-webhook", {
+  const response = await fetch("https://n8n-system.onrender.com/webhook/chatbot-webhook", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
