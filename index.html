@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Three.js GLTF Model</title>
+    <style>
+      /* Basic styling: no margins and full viewport */
+      body { margin: 0; overflow: hidden;
+        background-image: url('assets/the-invaders.webp');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;}
+      canvas { display: block;
+        background: transparent;}
+    </style>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- Optional: A hidden video element for future video textures -->
+    <video id="Idle_eyes" style="display:none" loop muted playsinline>
+      <source src="assets/idle.webm" type="video/webm">
+    </video>
+    <video id="Thinking_eyes" src="assets/idle.webm" loop muted playsinline style="display: none;"></video>
+    <video id="Talking_eyes" src="assets/idle.webm" loop muted playsinline style="display: none;"></video>
+
+    <div id="chat-container">
+      <div id="chat-messages"></div>
+      <div id="chat-input-area">
+        <input type="text" id="chat-input" placeholder="Ask me anything...">
+        <button id="send-btn">Send</button>
+        <button id="mic-btn">🎤</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.141.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.24.0/dist/index.min.js"></script>
+    <script src="main.js"></script>
+  </body>
+</html>
