@@ -130,3 +130,22 @@ window.addEventListener('focus', () => {
     idleVideo.play();
   }
 });
+
+//Configuration for n8n memory
+const sessionId = localStorage.getItem("chatSessionId") || crypto.randomUUID();
+localStorage.setItem("chatSessionId", sessionId);
+
+// Then when sending messages to webhook:
+async function sendToWebhook(userInput) {
+  const response = await fetch("https://n8n-system.onrender.com/webhook-test/chatbot-webhook", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: userInput,
+      sessionId: sessionId  // <- include the same ID
+    })
+  });
+
+  const data = await response.json();
+  return data.reply; // or whatever structure your webhook returns
+}
