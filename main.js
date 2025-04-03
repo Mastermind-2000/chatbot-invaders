@@ -294,7 +294,7 @@ try {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SpeechRecognition) {
     recognition = new SpeechRecognition();
-    recognition.lang = 'en-US';
+    recognition.lang = 'ru-RU';
     recognition.continuous = false;
     
     recognition.onresult = async (event) => {
