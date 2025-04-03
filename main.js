@@ -46,6 +46,7 @@ loader.load(
 
     // Set up the AnimationMixer for this model
     const mixer = new THREE.AnimationMixer(model);
+    window.loadedAnimations = gltf.animations;
 
     // Find the "Idle" animation clip by name
     const idleClip = THREE.AnimationClip.findByName(gltf.animations, 'Idle');
@@ -149,8 +150,13 @@ function setCharacterState(state) {
   if (window.mixer && window.loadedAnimations) {
     const clip = THREE.AnimationClip.findByName(window.loadedAnimations, animationName);
     if (clip) {
+      if (window.currentAction) {
+        window.currentAction.fadeOut(0.2); // fade out previous
+      }
+  
       const action = window.mixer.clipAction(clip);
       action.reset().fadeIn(0.2).play();
+      window.currentAction = action; // remember current action
     }
   }
 
