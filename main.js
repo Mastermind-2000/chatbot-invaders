@@ -195,11 +195,7 @@ async function sendToWebhook(userInput) {
   try {
     const response = await fetch("https://n8n-system.onrender.com/webhook/chatbot-webhook", {
       method: "POST",
-      headers: { 
-        "Content-Type": "application/json",
-        // You might need to add Origin header if your n8n is configured to check it
-        // "Origin": window.location.origin
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         message: userInput,
         sessionId: sessionId
@@ -210,19 +206,33 @@ async function sendToWebhook(userInput) {
       throw new Error(`Server responded with status: ${response.status}`);
     }
     
-    const data = await response.json();
+    // Check if response is empty
+    const text = await response.text();
+    if (!text) {
+      return "I received an empty response. Please try again.";
+    }
     
-    // Check different possible response structures
-    if (data.reply) return data.reply;
-    if (data.response) return data.response;
-    if (data.text) return data.text;
-    if (data.message) return data.message;
-    
-    // If we can't find a known structure, return the whole object as string
-    return JSON.stringify(data);
+    // Try to parse JSON
+    try {
+      const data = JSON.parse(text);
+      
+      // Check different possible response structures
+      if (data.reply) return data.reply;
+      if (data.response) return data.response;
+      if (data.output) return data.output;
+      if (data.text) return data.text;
+      if (data.message) return data.message;
+      
+      // If we have data but none of the expected fields, just stringify it
+      return JSON.stringify(data);
+    } catch (e) {
+      // If not valid JSON, return the text as is
+      console.log("Not valid JSON, returning text:", text);
+      return text;
+    }
   } catch (error) {
     console.error("Error sending to webhook:", error);
-    throw error; // Re-throw to handle in the calling function
+    throw error;
   }
 }
 
