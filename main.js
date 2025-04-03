@@ -68,6 +68,7 @@ loader.load(
         idleVideoTexture.minFilter = THREE.LinearFilter;
         idleVideoTexture.magFilter = THREE.LinearFilter;
         idleVideoTexture.format = THREE.RGBAFormat;
+        idleVideoTexture.flipY = false;
     
         // Replace stub texture with video texture
         model.traverse(function(child) {
