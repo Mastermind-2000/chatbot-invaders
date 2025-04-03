@@ -137,6 +137,7 @@ function setCharacterState(state) {
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.format = THREE.RGBAFormat;
+    texture.flipY = false;
 
     // Apply to the face material
     scene.traverse(child => {
