@@ -105,6 +105,17 @@ loader.load(
 // Position the camera
 camera.position.set(0, 0, 12);
 
+//Preload videos
+function preloadVideos() {
+  ["Idle_eyes", "Thinking_eyes", "Talking_eyes"].forEach(id => {
+    const video = document.getElementById(id);
+    if (video) video.load();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', preloadVideos);
+
+
 //Character states
 function setCharacterState(state) {
   const idleVideo = document.getElementById('Idle_eyes');
@@ -132,15 +143,14 @@ function setCharacterState(state) {
   if (selectedVideo) {
     selectedVideo.currentTime = 0;
     selectedVideo.play();
-
-    // Force browser to "render" the first frame before creating texture
-  selectedVideo.addEventListener('loadeddata', () => {
+  
+    // Force texture update immediately (no delay)
     const texture = new THREE.VideoTexture(selectedVideo);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     texture.format = THREE.RGBAFormat;
     texture.flipY = false;
-
+  
     // Apply to the face material
     scene.traverse(child => {
       if (child.isMesh && child.material && child.material.name === "Mat.028") {
@@ -148,8 +158,7 @@ function setCharacterState(state) {
         child.material.needsUpdate = true;
       }
     });
-  }, { once: true }); // only run once per switch
-}
+  }
 
   // Play animation (if model & mixer are loaded)
   if (window.mixer && window.loadedAnimations) {
