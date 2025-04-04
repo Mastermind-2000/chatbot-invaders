@@ -133,6 +133,8 @@ function setCharacterState(state) {
     selectedVideo.currentTime = 0;
     selectedVideo.play();
 
+    // Force browser to "render" the first frame before creating texture
+  selectedVideo.addEventListener('loadeddata', () => {
     const texture = new THREE.VideoTexture(selectedVideo);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
@@ -146,7 +148,8 @@ function setCharacterState(state) {
         child.material.needsUpdate = true;
       }
     });
-  }
+  }, { once: true }); // only run once per switch
+}
 
   // Play animation (if model & mixer are loaded)
   if (window.mixer && window.loadedAnimations) {
