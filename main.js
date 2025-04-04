@@ -261,6 +261,58 @@ window.speechSynthesis.onvoiceschanged = () => {
   speechSynthesis.getVoices();
 };
 
+// Enhanced speak function with better voice selection and speed control
+function speak(text) {
+  // Cancel any ongoing speech
+  window.speechSynthesis.cancel();
+  
+  setCharacterState('talking');
+  
+  // Create a new utterance
+  const utterance = new SpeechSynthesisUtterance();
+  utterance.text = text;
+  utterance.lang = 'ru-RU';
+  utterance.rate = 1.3; // Adjust this value to change speed (1.0 is normal, higher is faster)
+  utterance.pitch = 1.0; // Normal pitch (0.1 to 2.0)
+  
+  // Handle completion
+  utterance.onend = () => {
+    setCharacterState('idle');
+  };
+  
+  // Force voice selection
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length) {
+    // Try to find a good Russian voice
+    const russianVoice = voices.find(v => 
+      v.lang === 'ru-RU' && (v.name.includes('Google') || v.name.includes('Yandex'))
+    ) || voices.find(v => v.lang === 'ru-RU');
+    
+    if (russianVoice) {
+      console.log("Using voice:", russianVoice.name);
+      utterance.voice = russianVoice;
+    }
+  }
+  
+  // Handle case where voices might not be loaded yet
+  if (voices.length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      const newVoices = window.speechSynthesis.getVoices();
+      const russianVoice = newVoices.find(v => 
+        v.lang === 'ru-RU' && (v.name.includes('Google') || v.name.includes('Yandex'))
+      ) || newVoices.find(v => v.lang === 'ru-RU');
+      
+      if (russianVoice) {
+        console.log("Using voice:", russianVoice.name);
+        utterance.voice = russianVoice;
+      }
+      window.speechSynthesis.speak(utterance);
+    };
+  } else {
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
 // Display reply in chat box
 function displayReply(text, sender = 'bot') {
   const chatMessages = document.getElementById('chat-messages');
@@ -271,25 +323,7 @@ function displayReply(text, sender = 'bot') {
   chatMessages.scrollTop = chatMessages.scrollHeight;
 
   if (sender === 'bot') {
-    setCharacterState("talking");
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ru-RU';
-
-    // Pick a specific Russian voice if available
-    const voices = speechSynthesis.getVoices();
-    const russianVoice = voices.find(voice =>
-      voice.lang === 'ru-RU' && voice.name.includes('Google')
-    );
-    if (russianVoice) {
-      utterance.voice = russianVoice;
-    }
-
-    utterance.onend = () => {
-      setCharacterState("idle");
-    };
-
-    speechSynthesis.speak(utterance);
+    speak(text); // Use the new speak function instead of inline speech code
   }
 }
 
