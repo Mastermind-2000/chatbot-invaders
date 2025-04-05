@@ -272,8 +272,8 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance();
   utterance.text = text;
   utterance.lang = 'ru-RU';
-  utterance.rate = 1.3; // Adjust this value to change speed (1.0 is normal, higher is faster)
-  utterance.pitch = 1.0; // Normal pitch (0.1 to 2.0)
+  utterance.rate = 1.4; // Adjust this value to change speed (1.0 is normal, higher is faster)
+  utterance.pitch = 1.5; // Normal pitch (0.1 to 2.0)
   
   // Handle completion
   utterance.onend = () => {
