@@ -342,8 +342,105 @@ document.getElementById('send-btn').addEventListener('click', async () => {
   displayReply(botReply, 'bot');
 });
 
+//Mic settings
+let microphoneActive = false;
+
+function toggleContinuousListening() {
+  microphoneActive = !microphoneActive;
+  
+  const micOnIcon = document.getElementById('mic-on');
+  const micOffIcon = document.getElementById('mic-off');
+  
+  if (microphoneActive) {
+    // Show active icon
+    micOnIcon.style.display = 'block';
+    micOffIcon.style.display = 'none';
+    startContinuousListening();
+  } else {
+    // Show inactive icon
+    micOnIcon.style.display = 'none';
+    micOffIcon.style.display = 'block';
+    stopContinuousListening();
+  }
+}
+
+function startContinuousListening() {
+  if (!recognition || !microphoneActive) return;
+  
+  try {
+    recognition.start();
+    console.log("Continuous listening started");
+  } catch (error) {
+    console.error("Error starting continuous recognition:", error);
+    // Reset microphone state in case of error
+    microphoneActive = false;
+    document.getElementById('mic-on').style.display = 'none';
+    document.getElementById('mic-off').style.display = 'block';
+  }
+}
+
+function stopContinuousListening() {
+  if (!recognition) return;
+  
+  try {
+    recognition.stop();
+    console.log("Continuous listening stopped");
+  } catch (error) {
+    console.error("Error stopping recognition:", error);
+  }
+}
+
+
 //Voice input
+let microphoneActive = false;
 let recognition;
+
+function toggleContinuousListening() {
+  microphoneActive = !microphoneActive;
+  
+  const micOnIcon = document.getElementById('mic-on');
+  const micOffIcon = document.getElementById('mic-off');
+  
+  if (microphoneActive) {
+    // Show active icon
+    micOnIcon.style.display = 'block';
+    micOffIcon.style.display = 'none';
+    startContinuousListening();
+  } else {
+    // Show inactive icon
+    micOnIcon.style.display = 'none';
+    micOffIcon.style.display = 'block';
+    stopContinuousListening();
+  }
+}
+
+function startContinuousListening() {
+  if (!recognition || !microphoneActive) return;
+  
+  try {
+    recognition.start();
+    console.log("Continuous listening started");
+  } catch (error) {
+    console.error("Error starting continuous recognition:", error);
+    // Reset microphone state in case of error
+    microphoneActive = false;
+    document.getElementById('mic-on').style.display = 'none';
+    document.getElementById('mic-off').style.display = 'block';
+  }
+}
+
+function stopContinuousListening() {
+  if (!recognition) return;
+  
+  try {
+    recognition.stop();
+    console.log("Continuous listening stopped");
+  } catch (error) {
+    console.error("Error stopping recognition:", error);
+  }
+}
+
+//Speech recognition
 try {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SpeechRecognition) {
@@ -371,6 +468,16 @@ try {
       displayReply("Sorry, I couldn't understand that. Please try typing instead.", 'bot');
       setCharacterState("idle");
     };
+    
+    // Add this new handler for auto-restart
+    recognition.onend = () => {
+      // Auto-restart recognition if active mode is on
+      if (microphoneActive) {
+        setTimeout(() => {
+          startContinuousListening();
+        }, 100); // Small delay before restarting
+      }
+    };
   } else {
     document.getElementById('mic-btn').style.display = 'none';
   }
@@ -380,15 +487,7 @@ try {
 }
 
 // Update mic button click handler
-document.getElementById('mic-btn').addEventListener('click', () => {
-  if (recognition) {
-    try {
-      recognition.start();
-    } catch (error) {
-      console.error("Error starting recognition:", error);
-    }
-  }
-});
+document.getElementById('mic-btn').addEventListener('click', toggleContinuousListening);
 
 //Get voices list for console
 speechSynthesis.getVoices().forEach(v => console.log(v.name, v.lang));

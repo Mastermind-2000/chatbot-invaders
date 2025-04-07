@@ -29,7 +29,17 @@
       <div id="chat-input-area">
         <input type="text" id="chat-input" placeholder="Ask me anything...">
         <button id="send-btn">Send</button>
-        <button id="mic-btn">🎤</button>
+        <button id="mic-btn">
+          <svg id="mic-off" class="mic-icon" viewBox="0 0 24 24" width="24" height="24">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="currentColor"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="currentColor"/>
+          </svg>
+          <svg id="mic-on" class="mic-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+            <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="#ff4b4b"/>
+            <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="#ff4b4b"/>
+            <circle cx="12" cy="12" r="12" fill="#ff4b4b" opacity="0.2"/>
+          </svg>
+        </button>
       </div>
     </div>
 
