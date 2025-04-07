@@ -441,6 +441,56 @@ function stopContinuousListening() {
 }
 
 //Speech recognition
+// Voice input
+// Only declare microphoneActive once
+let microphoneActive = false;
+let recognition;
+
+function toggleContinuousListening() {
+  microphoneActive = !microphoneActive;
+  
+  const micOnIcon = document.getElementById('mic-on');
+  const micOffIcon = document.getElementById('mic-off');
+  
+  if (microphoneActive) {
+    // Show active icon
+    micOnIcon.style.display = 'block';
+    micOffIcon.style.display = 'none';
+    startContinuousListening();
+  } else {
+    // Show inactive icon
+    micOnIcon.style.display = 'none';
+    micOffIcon.style.display = 'block';
+    stopContinuousListening();
+  }
+}
+
+function startContinuousListening() {
+  if (!recognition || !microphoneActive) return;
+  
+  try {
+    recognition.start();
+    console.log("Continuous listening started");
+  } catch (error) {
+    console.error("Error starting continuous recognition:", error);
+    // Reset microphone state in case of error
+    microphoneActive = false;
+    document.getElementById('mic-on').style.display = 'none';
+    document.getElementById('mic-off').style.display = 'block';
+  }
+}
+
+function stopContinuousListening() {
+  if (!recognition) return;
+  
+  try {
+    recognition.stop();
+    console.log("Continuous listening stopped");
+  } catch (error) {
+    console.error("Error stopping recognition:", error);
+  }
+}
+
 try {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (SpeechRecognition) {
