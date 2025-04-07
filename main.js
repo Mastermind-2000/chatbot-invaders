@@ -1,5 +1,3 @@
-// Cleaned JavaScript for Chatbot with working mic toggle and animated 3D character
-
 // === Three.js Setup ===
 const scene = new THREE.Scene();
 scene.background = null;
@@ -202,10 +200,23 @@ try {
   console.error("Speech recognition not supported:", err);
 }
 
-document.getElementById('mic-btn').addEventListener('click', () => {
+function toggleContinuousListening() {
   microphoneActive = !microphoneActive;
-  document.getElementById('mic-on').style.display = microphoneActive ? 'block' : 'none';
-  document.getElementById('mic-off').style.display = microphoneActive ? 'none' : 'block';
-  if (microphoneActive) recognition?.start();
-  else recognition?.stop();
-});
+
+  const micOnIcon = document.getElementById('mic-on');
+  const micOffIcon = document.getElementById('mic-off');
+
+  if (microphoneActive) {
+    micOnIcon.style.display = 'block';
+    micOnIcon.classList.add('pulsing'); // Добавляем пульсацию
+    micOffIcon.style.display = 'none';
+    recognition?.start();
+  } else {
+    micOnIcon.style.display = 'none';
+    micOnIcon.classList.remove('pulsing'); // Убираем пульсацию
+    micOffIcon.style.display = 'block';
+    recognition?.stop();
+  }
+}
+
+document.getElementById('mic-btn').addEventListener('click', toggleContinuousListening);
