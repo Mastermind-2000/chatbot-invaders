@@ -131,14 +131,41 @@ function displayReply(text, sender = 'bot') {
   if (sender === 'bot') speak(text);
 }
 
+// Flag to track if the bot is currently speaking
+let isBotSpeaking = false;
+
 function speak(text) {
   window.speechSynthesis.cancel();
   setCharacterState('talking');
+  
+  // Set the flag to indicate bot is speaking
+  isBotSpeaking = true;
+  
+  // Pause recognition while bot is speaking, but keep the visual state unchanged
+  if (recognition && microphoneActive) {
+    recognition.stop();
+    // We don't update the UI here to maintain the appearance that the mic is still on
+  }
+  
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ru-RU';
   utterance.rate = 1.4;
   utterance.pitch = 1.5;
-  utterance.onend = () => setCharacterState('idle');
+  
+  utterance.onend = () => {
+    setCharacterState('idle');
+    isBotSpeaking = false;
+    
+    // Add a delay before restarting recognition to avoid picking up echo
+    if (microphoneActive) {
+      // Keep the mic visually active during the transition
+      setTimeout(() => {
+        if (microphoneActive && !isBotSpeaking) {
+          recognition?.start();
+        }
+      }, 500); // 500ms delay to ensure audio output has completely stopped
+    }
+  };
 
   const voices = speechSynthesis.getVoices();
   const russianVoice = voices.find(v => v.lang === 'ru-RU' && v.name.includes('Google')) || voices.find(v => v.lang === 'ru-RU');
@@ -190,10 +217,14 @@ try {
 
     recognition.onresult = async event => {
       const voiceInput = event.results[0][0].transcript;
-      displayReply(voiceInput, 'user');
-      setCharacterState("thinking");
-      const botReply = await sendToWebhook(voiceInput);
-      displayReply(botReply, 'bot');
+      
+      // Only process user voice if the bot is not currently speaking
+      if (!isBotSpeaking) {
+        displayReply(voiceInput, 'user');
+        setCharacterState("thinking");
+        const botReply = await sendToWebhook(voiceInput);
+        displayReply(botReply, 'bot');
+      }
     };
 
     recognition.onerror = event => {
@@ -202,7 +233,10 @@ try {
     };
 
     recognition.onend = () => {
-      if (microphoneActive) setTimeout(() => recognition.start(), 100);
+      // Only restart recognition if the mic is active and the bot is not speaking
+      if (microphoneActive && !isBotSpeaking) {
+        setTimeout(() => recognition.start(), 200);
+      }
     };
   }
 } catch (err) {
@@ -217,12 +251,16 @@ function toggleContinuousListening() {
 
   if (microphoneActive) {
     micOnIcon.style.display = 'block';
-    micOnIcon.classList.add('pulsing'); // Добавляем пульсацию
+    micOnIcon.classList.add('pulsing');
     micOffIcon.style.display = 'none';
-    recognition?.start();
+    
+    // Only start recognition if the bot is not currently speaking
+    if (!isBotSpeaking) {
+      recognition?.start();
+    }
   } else {
     micOnIcon.style.display = 'none';
-    micOnIcon.classList.remove('pulsing'); // Убираем пульсацию
+    micOnIcon.classList.remove('pulsing');
     micOffIcon.style.display = 'block';
     recognition?.stop();
   }
