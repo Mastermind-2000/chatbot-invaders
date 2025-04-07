@@ -82,6 +82,7 @@ function animate() {
 animate();
 
 // === Character State ===
+// Restore the original setCharacterState function exactly as it was
 function setCharacterState(state) {
   const videos = {
     idle: document.getElementById('Idle_eyes'),
@@ -136,6 +137,8 @@ let isBotSpeaking = false;
 
 function speak(text) {
   window.speechSynthesis.cancel();
+  
+  // Set character to talking state and make sure we're updating the 3D model correctly
   setCharacterState('talking');
   
   // Set the flag to indicate bot is speaking
@@ -153,6 +156,7 @@ function speak(text) {
   utterance.pitch = 1.5;
   
   utterance.onend = () => {
+    // Set back to idle state when done speaking
     setCharacterState('idle');
     isBotSpeaking = false;
     
