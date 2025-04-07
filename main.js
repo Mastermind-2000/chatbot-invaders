@@ -16,8 +16,15 @@ scene.add(new THREE.AmbientLight(0xffffff, 1.8));
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 directionalLight.position.set(5, 8, 8);
 scene.add(directionalLight);
-scene.add(new THREE.DirectionalLight(0xffffff, 0.5).position.set(-5, 0, 6));
-scene.add(new THREE.DirectionalLight(0xffffff, 0.3).position.set(8, -10, 4));
+
+const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.5);
+fillLight1.position.set(-5, 0, 6);
+scene.add(fillLight1);
+
+const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
+fillLight2.position.set(8, -10, 4);
+scene.add(fillLight2);
+
 
 // === Animation Mixer and Clock ===
 const clock = new THREE.Clock();
