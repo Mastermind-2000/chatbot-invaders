@@ -441,8 +441,7 @@ function stopContinuousListening() {
 }
 
 //Speech recognition
-// Voice input
-// Only declare microphoneActive once
+//Voice input
 let microphoneActive = false;
 let recognition;
 
@@ -536,7 +535,7 @@ try {
   document.getElementById('mic-btn').style.display = 'none';
 }
 
-// Update mic button click handler
+// Keep only one event listener for the mic button
 document.getElementById('mic-btn').addEventListener('click', toggleContinuousListening);
 
 //Get voices list for console
