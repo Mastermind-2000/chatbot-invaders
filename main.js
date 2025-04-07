@@ -12,14 +12,16 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // === Lighting ===
-scene.add(new THREE.AmbientLight(0xffffff, 1.8));
+const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
+scene.add(ambientLight);
+
 const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
 directionalLight.position.set(5, 8, 8);
 scene.add(directionalLight);
 
-const fillLight1 = new THREE.DirectionalLight(0xffffff, 0.5);
-fillLight1.position.set(-5, 0, 6);
-scene.add(fillLight1);
+const fillLight = new THREE.DirectionalLight(0xffffff, 0.5);
+fillLight.position.set(-5, 0, 6);
+scene.add(fillLight);
 
 const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
 fillLight2.position.set(8, -10, 4);
