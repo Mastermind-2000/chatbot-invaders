@@ -222,41 +222,50 @@ function displayReply(text, sender = 'bot') {
 let isBotSpeaking = false; // Flag to track if the bot is currently speaking
 
 function speak(text) {
-    // 1. STOP recognition explicitly when bot starts speaking
-    console.log("Bot starting to speak, stopping recognition if active.");
-    stopRecognition(); // <--- ADDED: Stop listening
+  // 1. STOP recognition explicitly when bot starts speaking
+  console.log("Bot starting to speak, stopping recognition if active.");
+  stopRecognition(); // Stop listening
 
-    window.speechSynthesis.cancel(); // Cancel any previous speech
-    setCharacterState('talking');
-    isBotSpeaking = true; // Set flag: Bot IS speaking
-    console.log("isBotSpeaking flag set to true.");
+  window.speechSynthesis.cancel(); // Cancel any previous speech
+  setCharacterState('talking');
+  isBotSpeaking = true; // Set flag: Bot IS speaking
+  console.log("isBotSpeaking flag set to true.");
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ru-RU';
-    utterance.rate = 1.4;
-    utterance.pitch = 1.5;
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = 'ru-RU';
+  utterance.rate = 1.4;
+  utterance.pitch = 1.5;
 
-    utterance.onend = () => {
-        console.log("Bot finished speaking (utterance.onend).");
-        setCharacterState('idle');
-        // Delay resetting flag AND potentially restarting recognition
-        setTimeout(() => {
-            isBotSpeaking = false; // Set flag: Bot is NO LONGER speaking
-            console.log("isBotSpeaking flag set to false.");
-            // IMPORTANT: DO NOT restart recognition here.
-            // Let the natural recognition.onend event handle it
-            // if the mic button is still active.
-        }, 500); // <--- INCREASED DELAY (e.g., 500ms) - Tune as needed
-    };
+  utterance.onend = () => {
+      console.log("Bot finished speaking (utterance.onend).");
+      setCharacterState('idle');
+      // Delay resetting flag AND potentially restarting recognition
+      setTimeout(() => {
+          isBotSpeaking = false; // Set flag: Bot is NO LONGER speaking
+          console.log("isBotSpeaking flag set to false.");
 
-    utterance.onerror = (event) => {
-        console.error("SpeechSynthesis Error:", event.error);
-        // Ensure state is reset even on error
-         setCharacterState('idle');
-         isBotSpeaking = false; // Reset flag on error too
-         console.log("isBotSpeaking flag set to false due to speech error.");
-         // If mic should be active, the next recognition.onend should restart it
-    };
+          // If the user intended the mic to be on, restart recognition now
+          if (microphoneActive) {
+              console.log("Bot finished, restarting recognition because microphoneActive is true.");
+              startRecognition(); // Restart listening
+          }
+
+      }, 500); // Keep the delay (tune as needed)
+  };
+
+  utterance.onerror = (event) => {
+      console.error("SpeechSynthesis Error:", event.error);
+      // Ensure state is reset even on error
+       setCharacterState('idle');
+       const wasSpeaking = isBotSpeaking;
+       isBotSpeaking = false; // Reset flag on error too
+       console.log("isBotSpeaking flag set to false due to speech error.");
+       // If mic should be active, try restarting recognition even after speech error
+       if (wasSpeaking && microphoneActive) {
+            console.log("Bot speech errored, restarting recognition because microphoneActive is true.");
+            startRecognition();
+       }
+  };
 
     const voices = speechSynthesis.getVoices(); // Keep voice selection
     const russianVoice = voices.find(v => v.lang === 'ru-RU' && v.name.includes('Google')) || voices.find(v => v.lang === 'ru-RU');
