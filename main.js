@@ -348,7 +348,6 @@ let recognition;
 let recognitionActive = false;
 const micOnIcon = document.getElementById('mic-on');
 const micOffIcon = document.getElementById('mic-off');
-const micButton = document.getElementById('mic-btn'); // Assume micButton defined earlier
 
 
 // Safer function to start recognition with retry logic
