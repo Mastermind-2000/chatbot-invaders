@@ -52,7 +52,7 @@ loader.load(
         }
 
         // --- Video Texture and Material Caching ---
-        const idleVideo = document.getElementById('Idle_eyes'); // Assumes duplicate ID is fixed in HTML
+        const idleVideo = document.getElementById('Idle_eyes');
         const thinkingVideo = document.getElementById('Thinking_eyes');
         const talkingVideo = document.getElementById('Talking_eyes');
 
@@ -61,58 +61,122 @@ loader.load(
             return; // Stop if videos aren't present
         }
 
-        // Play the default video
-        idleVideo.play().catch(e => console.error("Error playing idle video:", e));
+        // --- Helper function to wait for video readiness ---
+        function waitForVideoReady(video) {
+          return new Promise((resolve, reject) => {
+              // Проверяем, возможно видео уже готово?
+              // readyState 3 (HAVE_FUTURE_DATA) или 4 (HAVE_ENOUGH_DATA)
+              if (video.readyState >= 3) {
+                  console.log(`Video ${video.id || video.src} already ready (readyState: ${video.readyState})`);
+                  resolve(video); // Возвращаем сам элемент для удобства
+                  return;
+              }
+              if (video.error) { // Проверяем, не было ли ошибки ранее
+                   console.error(`Video ${video.id || video.src} already has an error state.`);
+                   reject(new Error(`Video already has an error: ${video.id || video.src}`));
+                   return;
+              }
 
-        // Create textures ONCE
-        idleTexture = new THREE.VideoTexture(idleVideo);
-        thinkingTexture = new THREE.VideoTexture(thinkingVideo);
-        talkingTexture = new THREE.VideoTexture(talkingVideo);
+              let resolved = false; // Флаг, чтобы избежать двойного разрешения/отклонения
 
-        const setupTexture = (texture) => {
-            texture.minFilter = THREE.LinearFilter;
-            texture.magFilter = THREE.LinearFilter;
-            texture.format = THREE.RGBAFormat;
-            texture.flipY = false; // Important for GLTF typically
-            texture.needsUpdate = true; // Ensure initial update
-        };
+              const onCanPlay = () => {
+                  if (resolved) return;
+                  resolved = true;
+                  console.log(`Video ${video.id || video.src} is ready (canplay event).`);
+                  cleanup();
+                  resolve(video);
+              };
 
-        setupTexture(idleTexture);
-        setupTexture(thinkingTexture);
-        setupTexture(talkingTexture);
+              const onError = (err) => {
+                  if (resolved) return;
+                  resolved = true;
+                  console.error(`Video Error (${video.id || video.src}):`, err);
+                  cleanup();
+                  reject(new Error(`Video failed to load: ${video.id || video.src}`));
+              };
 
+              const cleanup = () => { // Функция для удаления слушателей
+                  video.removeEventListener('canplay', onCanPlay);
+                  video.removeEventListener('error', onError);
+              };
 
-        // Traverse model ONCE to find and cache the face material
-        model.traverse(child => {
-            if (child.isMesh) {
-                 // Optional: Still replace the initial placeholder texture if needed
-                 // Note: This assumes 'face_tex.png' is NOT Mat.028
-                 if (child.material?.map?.image?.currentSrc?.includes("face_tex.png")) {
-                    console.log("Replacing face_tex.png with initial idle texture on material:", child.material.name);
-                    child.material.map = idleTexture;
-                    child.material.needsUpdate = true;
-                 }
+              // Добавляем слушатели
+              video.addEventListener('canplay', onCanPlay);
+              video.addEventListener('error', onError);
+          });
+      }
 
-                 // Find and CACHE the primary material for state changes
-                 if (child.material?.name === "Mat.028") {
-                    faceMaterial = child.material; // Cache the material reference
-                    console.log("Found and cached face material:", faceMaterial.name);
-                    faceMaterial.map = idleTexture; // Apply initial texture
-                    faceMaterial.transparent = true; // Set transparency and emission once
-                    faceMaterial.emissive = new THREE.Color(0xffffff);
-                    faceMaterial.emissiveIntensity = 2.0;
-                    faceMaterial.needsUpdate = true;
-                 }
-            }
-        });
+      // --- Wait for all videos to be ready using Promise.all ---
+      console.log("Waiting for all videos to be ready...");
+      const videoPromises = [
+          waitForVideoReady(idleVideo),
+          waitForVideoReady(thinkingVideo),
+          waitForVideoReady(talkingVideo)
+      ];
 
-        if (!faceMaterial) {
-             console.warn("Material 'Mat.028' not found in the model. Character state changes won't update texture.");
-        }
+      Promise.all(videoPromises)
+          .then(([readyIdleVideo, readyThinkingVideo, readyTalkingVideo]) => {
+              // Этот код выполнится ТОЛЬКО КОГДА все три видео готовы
+              console.log("All videos are ready. Creating textures and applying initial state.");
 
-    },
-    undefined, // Progress callback (optional)
-    (error) => console.error('Model load error:', error)
+              // --- Create textures ONCE --- (Используем элементы, возвращенные промисами)
+              idleTexture = new THREE.VideoTexture(readyIdleVideo);
+              thinkingTexture = new THREE.VideoTexture(readyThinkingVideo);
+              talkingTexture = new THREE.VideoTexture(readyTalkingVideo);
+
+              const setupTexture = (texture) => { // Настройка текстур
+                  texture.minFilter = THREE.LinearFilter;
+                  texture.magFilter = THREE.LinearFilter;
+                  texture.format = THREE.RGBAFormat;
+                  texture.flipY = false;
+                  texture.needsUpdate = true; // Важно для первого кадра
+              };
+
+              setupTexture(idleTexture);
+              setupTexture(thinkingTexture);
+              setupTexture(talkingTexture);
+
+              // --- Traverse model ONCE to find face material (делаем это здесь, т.к. нужна idleTexture) ---
+              model.traverse(child => {
+                  if (child.isMesh) {
+                      // Optional replacement
+                      if (child.material?.map?.image?.currentSrc?.includes("face_tex.png")) {
+                           console.log("Replacing face_tex.png with initial idle texture...");
+                           child.material.map = idleTexture;
+                           child.material.needsUpdate = true;
+                      }
+                      // Find and cache face material
+                      if (child.material?.name === "Mat.028") {
+                           faceMaterial = child.material;
+                           console.log("Found and cached face material:", faceMaterial.name);
+                           faceMaterial.map = idleTexture; // Apply initial texture
+                           faceMaterial.transparent = true;
+                           faceMaterial.emissive = new THREE.Color(0xffffff);
+                           faceMaterial.emissiveIntensity = 2.0;
+                           faceMaterial.needsUpdate = true;
+                      }
+                  }
+              });
+
+               if (!faceMaterial) {
+                   console.warn("Material 'Mat.028' not found...");
+               }
+
+              // --- Play the default video NOW that it's ready ---
+              console.log("Playing initial idle video.");
+              readyIdleVideo.play().catch(e => console.error("Error playing idle video:", e));
+
+          })
+          .catch(error => {
+              // Обработка ошибки, если ХОТЯ БЫ ОДНО видео не загрузилось
+              console.error("Failed to get all videos ready:", error);
+              // Здесь можно показать сообщение об ошибке пользователю или использовать fallback
+              // Например, не применять видео текстуры вообще
+          });
+
+  },
+  undefined, // Progress callback
+  (error) => console.error('Model load error:', error)
 );
 
 camera.position.set(0, 0, 12);
