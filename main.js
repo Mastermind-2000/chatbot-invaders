@@ -129,26 +129,22 @@ function displayReply(text, sender = 'bot') {
   msg.textContent = text;
   chatMessages.appendChild(msg);
   chatMessages.scrollTop = chatMessages.scrollHeight;
-  if (sender === 'bot') speak(text);
+  
+  if (sender === 'bot') {
+    speak(text);
+  }
 }
 
 // Flag to track if the bot is currently speaking
 let isBotSpeaking = false;
 
+// Use a simple approach - just block processing results while speaking
 function speak(text) {
   window.speechSynthesis.cancel();
-  
-  // Set character to talking state and make sure we're updating the 3D model correctly
   setCharacterState('talking');
   
-  // Set the flag to indicate bot is speaking
+  // Set flag to indicate bot is speaking
   isBotSpeaking = true;
-  
-  // Pause recognition while bot is speaking, but keep the visual state unchanged
-  if (recognition && microphoneActive) {
-    recognition.stop();
-    // We don't update the UI here to maintain the appearance that the mic is still on
-  }
   
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'ru-RU';
@@ -156,19 +152,13 @@ function speak(text) {
   utterance.pitch = 1.5;
   
   utterance.onend = () => {
-    // Set back to idle state when done speaking
     setCharacterState('idle');
-    isBotSpeaking = false;
     
-    // Add a delay before restarting recognition to avoid picking up echo
-    if (microphoneActive) {
-      // Keep the mic visually active during the transition
-      setTimeout(() => {
-        if (microphoneActive && !isBotSpeaking) {
-          recognition?.start();
-        }
-      }, 500); // 500ms delay to ensure audio output has completely stopped
-    }
+    // Add a small delay before setting the flag to false
+    // This helps prevent the bot from hearing the end of its own speech
+    setTimeout(() => {
+      isBotSpeaking = false;
+    }, 200);
   };
 
   const voices = speechSynthesis.getVoices();
@@ -211,6 +201,34 @@ document.getElementById('send-btn').addEventListener('click', async () => {
 // === Voice Recognition with Toggle ===
 let microphoneActive = false;
 let recognition;
+let recognitionActive = false;
+
+// Safer function to start recognition with retry logic
+function startRecognition() {
+  if (!recognition || recognitionActive) return;
+  
+  try {
+    recognition.start();
+    recognitionActive = true;
+    console.log("Recognition started");
+  } catch (e) {
+    console.error("Failed to start recognition:", e);
+    recognitionActive = false;
+    
+    // Try again after a short delay
+    setTimeout(() => {
+      try {
+        if (microphoneActive && !recognitionActive) {
+          recognition.start();
+          recognitionActive = true;
+          console.log("Recognition restarted after error");
+        }
+      } catch (retryError) {
+        console.error("Retry failed:", retryError);
+      }
+    }, 1000);
+  }
+}
 
 try {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -218,28 +236,51 @@ try {
     recognition = new SpeechRecognition();
     recognition.lang = 'ru-RU';
     recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
 
     recognition.onresult = async event => {
       const voiceInput = event.results[0][0].transcript;
       
-      // Only process user voice if the bot is not currently speaking
+      // Only process the input if the bot is not speaking
       if (!isBotSpeaking) {
         displayReply(voiceInput, 'user');
         setCharacterState("thinking");
-        const botReply = await sendToWebhook(voiceInput);
-        displayReply(botReply, 'bot');
+        
+        try {
+          const botReply = await sendToWebhook(voiceInput);
+          displayReply(botReply, 'bot');
+        } catch (error) {
+          console.error("Error getting bot reply:", error);
+          setCharacterState('idle');
+        }
+      } else {
+        console.log("Ignored speech input while bot was speaking");
       }
     };
 
     recognition.onerror = event => {
       console.error("Speech recognition error:", event.error);
-      setCharacterState("idle");
+      recognitionActive = false;
+      
+      // Only try to restart if it was a network error and microphone is active
+      if (event.error === 'network' && microphoneActive) {
+        console.log("Network error detected, will try to reconnect...");
+        setTimeout(() => {
+          if (microphoneActive) startRecognition();
+        }, 2000);
+      }
     };
 
     recognition.onend = () => {
-      // Only restart recognition if the mic is active and the bot is not speaking
-      if (microphoneActive && !isBotSpeaking) {
-        setTimeout(() => recognition.start(), 200);
+      console.log("Recognition ended");
+      recognitionActive = false;
+      
+      // Restart recognition if mic is active and bot is not speaking
+      if (microphoneActive) {
+        setTimeout(() => {
+          if (microphoneActive) startRecognition();
+        }, 300);
       }
     };
   }
@@ -252,21 +293,32 @@ function toggleContinuousListening() {
 
   const micOnIcon = document.getElementById('mic-on');
   const micOffIcon = document.getElementById('mic-off');
+  const micBtn = document.getElementById('mic-btn');
 
   if (microphoneActive) {
+    // Show active state
     micOnIcon.style.display = 'block';
-    micOnIcon.classList.add('pulsing');
     micOffIcon.style.display = 'none';
+    micBtn.style.backgroundColor = '#ff4b4b'; // Red background when active
     
-    // Only start recognition if the bot is not currently speaking
-    if (!isBotSpeaking) {
-      recognition?.start();
-    }
+    // Start recognition
+    startRecognition();
   } else {
+    // Show inactive state
     micOnIcon.style.display = 'none';
-    micOnIcon.classList.remove('pulsing');
     micOffIcon.style.display = 'block';
-    recognition?.stop();
+    micBtn.style.backgroundColor = '#f0f0f0'; // Default background when inactive
+    
+    // Stop recognition
+    if (recognition && recognitionActive) {
+      try {
+        recognition.stop();
+        recognitionActive = false;
+        console.log("Recognition stopped by user");
+      } catch (e) {
+        console.error("Could not stop recognition:", e);
+      }
+    }
   }
 }
 
