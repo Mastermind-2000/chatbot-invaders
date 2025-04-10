@@ -165,6 +165,24 @@ loader.load(
               console.log("Playing initial idle video.");
               readyIdleVideo.play().catch(e => console.error("Error playing idle video:", e));
 
+              // ***** Bot greeting *****
+              console.log("Initial setup complete. Triggering welcome message.");
+
+              // Welcome message
+              const welcomeMessage = "Привет! Я Инвейдер, ваш виртуальный помощник. Чем могу быть полезен?";
+
+              // Устанавливаем задержку перед началом речи (например, 1.5 секунды)
+              setTimeout(() => {
+                  // Дополнительная проверка на всякий случай, чтобы не говорить, если что-то уже активно
+                  if (!isBotSpeaking && !recognitionActive) {
+                       console.log("Speaking welcome message...");
+                       speak(welcomeMessage);
+                  } else {
+                       console.log("Skipping welcome message as bot/recognition seems active already.");
+                  }
+              }, 1500); // Задержка в миллисекундах (1500 мс = 1.5 сек)
+              // ***** Greeting end *****
+
           })
           .catch(error => {
               // Обработка ошибки, если ХОТЯ БЫ ОДНО видео не загрузилось
