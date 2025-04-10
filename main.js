@@ -243,26 +243,32 @@ function setCharacterState(state) {
     }
 
 
-    // --- Animation Handling ---
-  const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking", "Talking"
-  if (mixer && loadedAnimations) {
+  // --- Animation Handling ---
+const animationName = state.charAt(0).toUpperCase() + state.slice(1); // "Idle", "Thinking", etc.
+
+if (mixer && loadedAnimations.length > 0) {
   const clip = THREE.AnimationClip.findByName(loadedAnimations, animationName);
-  if (clip) {
-    const action = mixer.clipAction(clip);
 
-    if (currentAction && currentAction !== action) {
-      // Smooth transition from current to new action
-      currentAction.crossFadeTo(action, 0.5, false); // duration, warp
-    } else {
-      action.reset().fadeIn(0.5).play(); // fallback for first-time or same action
-    }
-
-    action.play();
-    currentAction = action;
-  } else {
+  if (!clip) {
     console.warn("Animation clip not found for state:", animationName);
+    return;
   }
- }
+
+  const nextAction = mixer.clipAction(clip);
+
+  // If there's a current animation playing, crossfade
+  if (currentAction && currentAction !== nextAction) {
+    nextAction.reset();
+    currentAction.crossFadeTo(nextAction, 0.4, true); // 0.4s blend time
+  } else if (!currentAction) {
+    // First time setup
+    nextAction.reset().fadeIn(0.4).play();
+  }
+
+  nextAction.play();
+  currentAction = nextAction;
+}
+
 }
 
 
