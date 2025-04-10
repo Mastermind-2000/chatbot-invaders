@@ -424,7 +424,7 @@ function speak(text) {
             startRecognition();
           }, 300);
         }
-      }, 300);
+      }, 500);
     }
   
     // Start speaking
