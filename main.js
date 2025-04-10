@@ -243,27 +243,27 @@ function setCharacterState(state) {
     }
 
 
-   // --- Animation Handling ---
-const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking"
+    // --- Animation Handling ---
+const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking", "Talking"
 if (mixer && loadedAnimations) {
   const clip = THREE.AnimationClip.findByName(loadedAnimations, animationName);
   if (clip) {
     const action = mixer.clipAction(clip);
 
     if (currentAction && currentAction !== action) {
-      // Smoothly transition from previous to new animation
-      currentAction.crossFadeTo(action, 0.5, false); // 0.5 seconds fade duration
+      // Smooth transition from current to new action
+      currentAction.crossFadeTo(action, 0.5, false); // duration, warp
     } else {
-      action.reset().fadeIn(0.5).play(); // First-time animation or same clip
+      action.reset().fadeIn(0.5).play(); // fallback for first-time or same action
     }
 
     action.play();
-    currentAction = action; // Save as current
+    currentAction = action;
   } else {
     console.warn("Animation clip not found for state:", animationName);
   }
 }
-
+}
 
 
 // === Chat and Voice ===
