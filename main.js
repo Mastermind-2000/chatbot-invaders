@@ -422,7 +422,7 @@ function speak(text) {
           console.log("After speech reset: restarting recognition because microphoneActive is true.");
           setTimeout(() => {
             startRecognition();
-          }, 300);
+          }, 700);
         }
       }, 500);
     }
