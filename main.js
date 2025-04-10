@@ -243,29 +243,27 @@ function setCharacterState(state) {
     }
 
 
-    // --- Animation Handling ---
-    const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking"
-    if (mixer && loadedAnimations) {
-        const clip = THREE.AnimationClip.findByName(loadedAnimations, animationName);
-        if (clip) {
-            const action = mixer.clipAction(clip);
-            if (currentAction && currentAction !== action) {
-                currentAction.fadeOut(0.2); // Fade out previous action
-            }
-            action.reset().fadeIn(0.2).play(); // Fade in and play new action
-            currentAction = action; // Update current action
-        } else {
-            console.warn("Animation clip not found for state:", animationName);
-             // Optional: Play Idle animation as a fallback if state animation missing?
-             // const idleClip = THREE.AnimationClip.findByName(loadedAnimations, 'Idle');
-             // if (idleClip && currentAction !== mixer.clipAction(idleClip)) {
-             //     currentAction.fadeOut(0.2);
-             //     currentAction = mixer.clipAction(idleClip);
-             //     currentAction.reset().fadeIn(0.2).play();
-             // }
-        }
+   // --- Animation Handling ---
+const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking"
+if (mixer && loadedAnimations) {
+  const clip = THREE.AnimationClip.findByName(loadedAnimations, animationName);
+  if (clip) {
+    const action = mixer.clipAction(clip);
+
+    if (currentAction && currentAction !== action) {
+      // Smoothly transition from previous to new animation
+      currentAction.crossFadeTo(action, 0.5, false); // 0.5 seconds fade duration
+    } else {
+      action.reset().fadeIn(0.5).play(); // First-time animation or same clip
     }
+
+    action.play();
+    currentAction = action; // Save as current
+  } else {
+    console.warn("Animation clip not found for state:", animationName);
+  }
 }
+
 
 
 // === Chat and Voice ===
