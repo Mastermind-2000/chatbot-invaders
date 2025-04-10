@@ -814,9 +814,20 @@ const isEdge = navigator.userAgent.indexOf("Edge") > -1 ||
 navigator.userAgent.indexOf("Edg/") > -1;
 
 //Welcome message
-document.getElementById('start-button').addEventListener('click', () => {
-    // Hide the overlay
+document.getElementById('start-btn').addEventListener('click', () => {
     document.getElementById('start-overlay').style.display = 'none';
-    // Play welcome message
+    
+    // Check if mic should be turned on
+    const enableMic = document.getElementById('start-with-mic').checked;
+    
     displayReply("Привет! Я ваш виртуальный помощник. Чем могу помочь?", 'bot');
+    
+    // Turn on mic if the option was selected
+    if (enableMic) {
+      setTimeout(() => {
+        microphoneActive = true;
+        updateMicButtonState();
+        startRecognition();
+      }, 2000); // Short delay after greeting
+    }
   });
