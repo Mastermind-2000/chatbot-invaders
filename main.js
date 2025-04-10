@@ -244,8 +244,8 @@ function setCharacterState(state) {
 
 
     // --- Animation Handling ---
-const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking", "Talking"
-if (mixer && loadedAnimations) {
+  const animationName = state.charAt(0).toUpperCase() + state.slice(1); // e.g., "Idle", "Thinking", "Talking"
+  if (mixer && loadedAnimations) {
   const clip = THREE.AnimationClip.findByName(loadedAnimations, animationName);
   if (clip) {
     const action = mixer.clipAction(clip);
@@ -262,7 +262,7 @@ if (mixer && loadedAnimations) {
   } else {
     console.warn("Animation clip not found for state:", animationName);
   }
-}
+ }
 }
 
 
