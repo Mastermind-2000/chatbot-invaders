@@ -65,7 +65,6 @@ loader.load(
         function waitForVideoReady(video) {
           return new Promise((resolve, reject) => {
               // Проверяем, возможно видео уже готово?
-              // readyState 3 (HAVE_FUTURE_DATA) или 4 (HAVE_ENOUGH_DATA)
               if (video.readyState >= 3) {
                   console.log(`Video ${video.id || video.src} already ready (readyState: ${video.readyState})`);
                   resolve(video); // Возвращаем сам элемент для удобства
@@ -170,8 +169,6 @@ loader.load(
           .catch(error => {
               // Обработка ошибки, если ХОТЯ БЫ ОДНО видео не загрузилось
               console.error("Failed to get all videos ready:", error);
-              // Здесь можно показать сообщение об ошибке пользователю или использовать fallback
-              // Например, не применять видео текстуры вообще
           });
 
   },
@@ -273,6 +270,63 @@ if (mixer && loadedAnimations.length > 0) {
 
 
 // === Chat and Voice ===
+function getPreferredVoice() {
+    const voices = speechSynthesis.getVoices();
+    console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`).join(', '));
+    
+    // First try to find a Russian male voice
+    let russianMaleVoice = voices.find(v => 
+      v.lang.includes('ru') && 
+      (v.name.includes('Male') || v.name.includes('мужской') || v.name.includes('male'))
+    );
+    
+    // If no Russian male voice is found, look for any Russian voice
+    if (!russianMaleVoice) {
+      const russianVoice = voices.find(v => v.lang === 'ru-RU') || 
+                          voices.find(v => v.lang.includes('ru'));
+      
+      if (russianVoice) {
+        console.log(`Found Russian voice (may not be male): ${russianVoice.name}`);
+        return russianVoice;
+      }
+    } else {
+      console.log(`Found Russian male voice: ${russianMaleVoice.name}`);
+      return russianMaleVoice;
+    }
+    
+    // If no Russian voice found, try to find any male voice
+    const anyMaleVoice = voices.find(v => 
+      v.name.includes('Male') || v.name.includes('male') || v.name.includes('мужской')
+    );
+    
+    if (anyMaleVoice) {
+      console.log(`No Russian voice found, using male voice: ${anyMaleVoice.name}`);
+      return anyMaleVoice;
+    }
+    
+    // Fallback to any available voice
+    if (voices.length > 0) {
+      console.log(`No male voice found, using: ${voices[0].name}`);
+      return voices[0];
+    }
+    
+    console.warn("No voices available");
+    return null;
+  }
+
+function preprocessTextForSpeech(text) {
+    // Remove markdown formatting that shouldn't be read aloud
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold markers **text**
+      .replace(/\*(.*?)\*/g, '$1')     // Remove italic markers *text*
+      .replace(/\_\_/g, '')            // Remove underscores
+      .replace(/\[/g, '')              // Remove brackets
+      .replace(/\]/g, '')              // Remove brackets
+      .replace(/\(/g, ', ')            // Replace open parenthesis with pause
+      .replace(/\)/g, '')              // Remove close parenthesis
+      .replace(/\n\s*\n/g, '.\n')      // Replace double newlines with period and newline
+      .replace(/\n(\d+\.\s+)/g, '\n$1. '); // Add pause after numbered list items
+  }
 const chatMessages = document.getElementById('chat-messages'); // Cache element
 
 function displayReply(text, sender = 'bot') {
@@ -290,58 +344,104 @@ function displayReply(text, sender = 'bot') {
 let isBotSpeaking = false; // Flag to track if the bot is currently speaking
 
 function speak(text) {
-  // 1. STOP recognition explicitly when bot starts speaking
-  console.log("Bot starting to speak, stopping recognition if active.");
-  stopRecognition(); // Stop listening
-
-  window.speechSynthesis.cancel(); // Cancel any previous speech
-  setCharacterState('talking');
-  isBotSpeaking = true; // Set flag: Bot IS speaking
-  console.log("isBotSpeaking flag set to true.");
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = 'ru-RU';
-  utterance.rate = 1.4;
-  utterance.pitch = 1.5;
-
-  utterance.onend = () => {
+    // Preprocess text before speaking
+    const processedText = preprocessTextForSpeech(text);
+    
+    // 1. STOP recognition explicitly when bot starts speaking
+    console.log("Bot starting to speak, stopping recognition if active.");
+    stopRecognition(); // Stop listening
+  
+    window.speechSynthesis.cancel(); // Cancel any previous speech
+    setCharacterState('talking');
+    isBotSpeaking = true; // Set flag: Bot IS speaking
+    console.log("isBotSpeaking flag set to true.");
+  
+    const utterance = new SpeechSynthesisUtterance(processedText);
+    utterance.lang = 'ru-RU';
+  
+    // Add safety timeout to ensure animation and flags reset even if speech events fail
+    const speechTimeout = setTimeout(() => {
+      console.log("Speech safety timeout triggered - forcing reset");
+      resetAfterSpeech();
+    }, Math.max(20000, processedText.length * 50)); // Roughly estimate max speech time based on text length
+  
+    // Add an additional check for speech that might be stalled
+    let lastBoundaryTime = Date.now();
+    const progressCheckInterval = setInterval(() => {
+      const timeSinceLastBoundary = Date.now() - lastBoundaryTime;
+      if (timeSinceLastBoundary > 5000 && isBotSpeaking) {
+        console.warn("Speech appears stalled - no boundaries for 5 seconds");
+        clearInterval(progressCheckInterval);
+        clearTimeout(speechTimeout);
+        resetAfterSpeech();
+      }
+    }, 2000);
+  
+    // Normal end event handler
+    utterance.onend = () => {
       console.log("Bot finished speaking (utterance.onend).");
-      setCharacterState('idle');
-      // Delay resetting flag AND potentially restarting recognition
-      setTimeout(() => {
-          isBotSpeaking = false; // Set flag: Bot is NO LONGER speaking
-          console.log("isBotSpeaking flag set to false.");
-
-          // If the user intended the mic to be on, restart recognition now
-          if (microphoneActive) {
-              console.log("Bot finished, restarting recognition because microphoneActive is true.");
-              startRecognition(); // Restart listening
-          }
-
-      }, 500); // Keep the delay (tune as needed)
-  };
-
-  utterance.onerror = (event) => {
+      clearTimeout(speechTimeout); // Clear the safety timeout
+      clearInterval(progressCheckInterval);
+      resetAfterSpeech();
+    };
+  
+    // Error handler
+    utterance.onerror = (event) => {
       console.error("SpeechSynthesis Error:", event.error);
-      // Ensure state is reset even on error
-       setCharacterState('idle');
-       const wasSpeaking = isBotSpeaking;
-       isBotSpeaking = false; // Reset flag on error too
-       console.log("isBotSpeaking flag set to false due to speech error.");
-       // If mic should be active, try restarting recognition even after speech error
-       if (wasSpeaking && microphoneActive) {
-            console.log("Bot speech errored, restarting recognition because microphoneActive is true.");
+      clearTimeout(speechTimeout); // Clear the safety timeout
+      clearInterval(progressCheckInterval);
+      resetAfterSpeech();
+    };
+  
+    // Handle speech boundary events to detect progress
+    utterance.onboundary = () => {
+      lastBoundaryTime = Date.now();
+    };
+  
+    // Function to handle cleanup after speech (whether successful or interrupted)
+    function resetAfterSpeech() {
+      setCharacterState('idle');
+      
+      // Small delay before resetting flags and restarting recognition
+      setTimeout(() => {
+        isBotSpeaking = false;
+        console.log("isBotSpeaking flag set to false.");
+  
+        // Force recognition system to a clean state
+        if (recognition) {
+          try {
+            recognition.abort(); // Force stop if somehow still running
+          } catch (e) {
+            console.log("Error during forced recognition abort:", e);
+          }
+          recognitionActive = false;
+        }
+  
+        // If the microphone should be active, restart recognition
+        if (microphoneActive) {
+          console.log("After speech reset: restarting recognition because microphoneActive is true.");
+          setTimeout(() => {
             startRecognition();
-       }
-  };
-
-    const voices = speechSynthesis.getVoices(); // Keep voice selection
-    const russianVoice = voices.find(v => v.lang === 'ru-RU' && v.name.includes('Google')) || voices.find(v => v.lang === 'ru-RU');
-    if (russianVoice) utterance.voice = russianVoice;
-    else console.warn("Could not find specific Russian voice.");
-
-    speechSynthesis.speak(utterance);
+          }, 300);
+        }
+      }, 300);
+    }
+  
+    // Start speaking
+const selectedVoice = getPreferredVoice();
+if (selectedVoice) {
+  utterance.voice = selectedVoice;
+  
+  // Adjust pitch and rate for male character sound
+  // Lower values for more masculine sound (experiment with these)
+  utterance.pitch = 0.8;
+  utterance.rate = 1.4;
+} else {
+  console.warn("No voice selected, using browser default");
 }
+
+speechSynthesis.speak(utterance);
+  }
 
 // === Webhook Communication (Improved Error Handling) ===
 const sessionId = localStorage.getItem("chatSessionId") || crypto.randomUUID();
@@ -498,10 +598,12 @@ function updateMicButtonState() {
 
 
 try {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || 
+    window.webkitSpeechRecognition || 
+    window.mozSpeechRecognition || 
+    window.msSpeechRecognition;
   if (SpeechRecognition) {
       recognition = new SpeechRecognition();
-      // ... (keep recognition setup: lang, continuous, etc. the same) ...
       recognition.lang = 'ru-RU';
       recognition.continuous = false;
       recognition.interimResults = false;
@@ -619,7 +721,6 @@ try {
        displayReply("Sorry, voice input is not supported in your browser.", 'bot');
   }
 } catch (err) {
-  // ... (keep init error handling the same) ...
   console.error("Error initializing Speech Recognition:", err);
   if (micButton) micButton.disabled = true;
   displayReply("Error initializing voice input.", 'bot');
@@ -642,8 +743,72 @@ function toggleContinuousListening() {
 }
 
 
-// Event listener for mic button (Keep this the same)
 micButton.addEventListener('click', toggleContinuousListening);
 
-// Initial UI setup (Keep this the same)
-updateMicButtonState();
+// === Recovery Mechanism ===
+// Add a global rescue button or function to recover from stuck states
+function addRecoveryMechanism() {
+    // Add a keyboard shortcut
+    document.addEventListener('keydown', (event) => {
+      // Ctrl+Alt+R as a recovery key combination
+      if (event.ctrlKey && event.altKey && event.key === 'r') {
+        console.log("RECOVERY triggered by user");
+        forceResetAll();
+      }
+    });
+    
+    // Add to window object for console access
+    window.resetBot = forceResetAll;
+  }
+  
+  // Force reset all states and systems
+  function forceResetAll() {
+    console.log("Performing complete state reset");
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    // Reset animation state
+    setCharacterState('idle');
+    
+    // Reset all flags
+    isBotSpeaking = false;
+    
+    // Hard reset recognition
+    if (recognition) {
+      try {
+        recognition.abort();
+      } catch (e) {
+        console.log("Error during forced recognition abort:", e);
+      }
+      recognitionActive = false;
+    }
+    
+    // If microphone was active, try to restart it cleanly
+    if (microphoneActive) {
+      // Short delay before restarting
+      setTimeout(() => {
+        startRecognition();
+      }, 1000);
+    }
+    
+    console.log("Reset complete - system should be recovered");
+  }
+  
+  // Call this to initialize the recovery mechanism
+  addRecoveryMechanism();
+
+// Initialize voices as early as possible
+if (window.speechSynthesis) {
+    // Force load voices
+    speechSynthesis.getVoices();
+    
+    // Some browsers need this event to properly load voices
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      console.log("Voices loaded:", speechSynthesis.getVoices().length);
+    });
+  }
+
+  // Try to detect Edge specifically
+const isEdge = navigator.userAgent.indexOf("Edge") > -1 || 
+navigator.userAgent.indexOf("Edg/") > -1;
