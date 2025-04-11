@@ -1,14 +1,14 @@
 // === Three.js Setup ===
 const scene = new THREE.Scene();
 scene.background = null; // Use null for transparency with alpha: true
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / (window.innerHeight * 0.7), 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); // alpha: true for transparent background
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.0;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.setClearColor(0x000000, 0); // Set clear color with 0 alpha
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
 document.body.appendChild(renderer.domElement);
 
 // === Lighting ===
@@ -833,11 +833,11 @@ document.getElementById('start-btn').addEventListener('click', () => {
   });
 
   // 3D scene responsivness
-window.addEventListener('resize', function() {
+  window.addEventListener('resize', function() {
     // Update camera aspect ratio
-    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.aspect = window.innerWidth / (window.innerHeight * 0.7);
     camera.updateProjectionMatrix();
     
     // Update renderer size
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
   });

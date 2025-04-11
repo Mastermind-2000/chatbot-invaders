@@ -1,3 +1,13 @@
+body { 
+  margin: 0; 
+  overflow: hidden;
+  background-image: url('assets/the-invaders.webp');
+  background-size: cover;
+  background-position: center top; /* Changed to position background at top */
+  background-repeat: no-repeat;
+  height: 100vh; /* Full viewport height */
+}
+
 canvas {
   display: block;
   background: transparent;
