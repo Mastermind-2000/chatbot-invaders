@@ -10,19 +10,6 @@ renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.setClearColor(0x000000, 0); // Set clear color with 0 alpha
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-//=== Scene positioning ===
-const sceneContainer = document.createElement('div');
-sceneContainer.style.position = 'absolute';
-sceneContainer.style.top = '0';  // This stays at the top
-sceneContainer.style.height = '70%';  // Reduced from 80% to 70%
-sceneContainer.style.width = '100%';
-sceneContainer.style.display = 'flex';
-sceneContainer.style.alignItems = 'flex-start'; // Align content to top
-sceneContainer.style.justifyContent = 'center'; // Center horizontally
-document.body.prepend(sceneContainer);
-
-// Append the Three.js canvas to this container instead of directly to body
-sceneContainer.appendChild(renderer.domElement);
 // === Lighting ===
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
 scene.add(ambientLight);
