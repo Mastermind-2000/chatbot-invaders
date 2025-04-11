@@ -67,6 +67,9 @@ body, button, input, p, div, h1, h2, h3, h4, h5, h6 {
   max-width: 80%;
   font-family: 'Muller', Arial, sans-serif;
   font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #21324A;
 }
 
 .user {
@@ -85,6 +88,7 @@ body, button, input, p, div, h1, h2, h3, h4, h5, h6 {
 #chat-input {
   flex-grow: 1;
   padding: 8px;
+  padding-left: 16px;
   border: 1px solid #ddd;
   border-radius: 20px;
   margin-right: 8px;
@@ -94,7 +98,7 @@ body, button, input, p, div, h1, h2, h3, h4, h5, h6 {
 
 button {
   padding: 8px 12px;
-  background: #0084ff;
+  background: #2883d6;
   color: white;
   border: none;
   border-radius: 20px;
@@ -122,7 +126,7 @@ button {
 }
 
 #mic-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #e5e5e5;
 }
 
 .mic-option {
@@ -242,6 +246,12 @@ input:checked + .toggle:before {
   z-index: 1000;
   opacity: 1;
   transition: opacity 0.5s ease;
+}
+
+#send-btn, #mic-btn {
+  font-size: 13px;
+  padding: 10px 16px;
+  margin-left: 6px;
 }
 
 /* Responsive adjustments for mobile devices */
