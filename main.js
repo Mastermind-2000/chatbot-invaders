@@ -831,3 +831,13 @@ document.getElementById('start-btn').addEventListener('click', () => {
       }, 2000); // Short delay after greeting
     }
   });
+
+  // 3D scene responsivness
+window.addEventListener('resize', function() {
+    // Update camera aspect ratio
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    
+    // Update renderer size
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
