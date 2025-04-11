@@ -255,7 +255,7 @@ input:checked + .toggle:before {
   margin-left: 6px;
 }
 
-#mic-button {
+#mic-btn {
   width: 44px;
   height: 44px;
   }
