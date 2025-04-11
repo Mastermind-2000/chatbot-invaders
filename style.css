@@ -97,7 +97,8 @@ body, button, input, p, div, h1, h2, h3, h4, h5, h6 {
 }
 
 button {
-  padding: 8px 12px;
+  padding: 8px;
+  margin-right: 8px;
   background: #2883d6;
   color: white;
   border: none;
