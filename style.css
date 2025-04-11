@@ -255,6 +255,11 @@ input:checked + .toggle:before {
   margin-left: 6px;
 }
 
+#mic-button {
+  width: 44px;
+  height: 44px;
+  }
+
 /* Responsive adjustments for mobile devices */
 @media (max-width: 768px) {
   #chat-container {
