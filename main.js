@@ -11,6 +11,16 @@ renderer.setClearColor(0x000000, 0); // Set clear color with 0 alpha
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
+//=== Scene positioning ===
+const sceneContainer = document.createElement('div');
+sceneContainer.style.position = 'absolute';
+sceneContainer.style.top = '0';  
+sceneContainer.style.height = '80%'; // Only use top 80% of viewport
+sceneContainer.style.width = '100%';
+document.body.prepend(sceneContainer); // Add to top of body
+
+// Append the Three.js canvas to this container instead of directly to body
+sceneContainer.appendChild(renderer.domElement);
 // === Lighting ===
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
 scene.add(ambientLight);
