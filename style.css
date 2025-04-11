@@ -102,7 +102,7 @@ button {
   background: #2883d6;
   color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 30px;
   cursor: pointer;
   font-family: 'Muller', Arial, sans-serif;
   font-weight: 500;
@@ -301,4 +301,38 @@ input:checked + .toggle:before {
   .message {
     font-size: 15px;
   }
+
+  /* Modal styling */
+  .welcome-modal {
+    max-width: calc(100% - 32px); /* отступы по 16px слева и справа */
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .welcome-modal h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .welcome-modal p {
+    font-size: 16px;
+    margin-bottom: 16px;
+  }
+
+  .mic-option {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .toggle-label {
+    font-size: 15px;
+  }
+
+  #start-btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    width: 100%; /* растянуть кнопку */
+  }
+
 }
