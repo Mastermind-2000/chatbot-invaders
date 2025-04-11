@@ -9,6 +9,7 @@ renderer.toneMappingExposure = 1.0;
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.setClearColor(0x000000, 0); // Set clear color with 0 alpha
 renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
 // === Lighting ===
 const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
