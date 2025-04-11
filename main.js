@@ -39,7 +39,19 @@ loader.load(
     (gltf) => {
         const model = gltf.scene;
         model.rotation.y = -0.1;
+        model.position.y = 1.5;
         scene.add(model);
+        
+        // --- Model scaling for screens ---
+        const screenWidth = window.innerWidth;
+
+        if (screenWidth < 500) {
+          model.scale.set(1.8, 1.8, 1.8); // Tiny screens
+        } else if (screenWidth < 768) {
+         model.scale.set(1.5, 1.5, 1.5); // Tablets/small phones
+        } else {
+         model.scale.set(1, 1, 1); // Desktop
+        }
 
         // --- Animation Setup ---
         mixer = new THREE.AnimationMixer(model);

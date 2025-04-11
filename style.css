@@ -244,3 +244,31 @@ input:checked + .toggle:before {
   opacity: 1;
   transition: opacity 0.5s ease;
 }
+
+/* Responsive adjustments for mobile devices */
+@media screen and (max-width: 600px) {
+  #chat-container {
+    width: 90%; /* occupy 90% of the screen width */
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+  }
+
+  #chat-messages {
+    max-height: 250px; /* slightly reduce max height */
+  }
+
+  #chat-input-area {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  #chat-input {
+    margin-right: 4px;
+    padding: 10px;
+  }
+
+  #send-btn, #mic-btn {
+    padding: 8px;
+  }
+}
