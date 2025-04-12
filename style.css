@@ -299,7 +299,6 @@ input:checked + .toggle:before {
   html {
     height: 100%;
   }
-}
 
   #chat-container {
     width: calc(100% - 32px); /* отступы по 16px с каждой стороны */
