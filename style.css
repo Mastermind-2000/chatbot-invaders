@@ -268,6 +268,14 @@ input:checked + .toggle:before {
   margin-left: 6px;
 }
 
+#send-btn .send-text {
+  display: inline;
+}
+
+#send-btn .icon-container {
+  display: none;
+}
+
 #mic-btn {
   width: 44px;
   height: 44px;
@@ -286,6 +294,8 @@ input:checked + .toggle:before {
     margin-left: 8px;
     flex-shrink: 0;
 }
+
+
 
 /* Responsive adjustments for mobile devices */
 @media (max-width: 768px) {
@@ -337,7 +347,7 @@ input:checked + .toggle:before {
   }
 
   .icon-container {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     width: 24px;
@@ -348,6 +358,27 @@ input:checked + .toggle:before {
     width: 24px;
     height: 24px;
   }
+
+  #send-btn {
+    width: 48px;
+    height: 48px;
+    padding: 10px;
+    border-radius: 50%;
+    background: #2883d6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #send-btn .send-text {
+    display: none;
+  }
+
+  #send-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
 
   .message {
     font-size: 15px;
