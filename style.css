@@ -142,7 +142,8 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 20px 0;
+  margin-top: 20px;
+  margin-bottom: 12px;
   padding: 10px 15px;
   background-color: #f5f5f5;
   border-radius: 10px;
@@ -152,6 +153,7 @@ button {
   font-size: 16px;
   font-weight: 500;
   font-family: 'Muller', Arial, sans-serif;
+  color: #21324A;
 }
 
 .toggle-switch {
@@ -234,12 +236,15 @@ input:checked + .toggle:before {
   font-family: 'Muller', Arial, sans-serif;
   font-weight: 500;
   margin-bottom: 20px;
+  margin-top: 0;
+  color: #21324A;
 }
 
 .welcome-modal p {
   font-family: 'Muller', Arial, sans-serif;
   font-weight: 400;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  color: #21324A;
 }
 
 #start-overlay {
@@ -267,6 +272,20 @@ input:checked + .toggle:before {
   width: 44px;
   height: 44px;
   }
+
+.volume-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #555;
+  margin: 0;
+}
+
+.volume-hint svg {
+    margin-left: 8px;
+    flex-shrink: 0;
+}
 
 /* Responsive adjustments for mobile devices */
 @media (max-width: 768px) {
@@ -305,6 +324,14 @@ input:checked + .toggle:before {
     padding: 10px;
     width: 48px;
     height: 48px;
+  }
+
+  .icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
   }
 
   .mic-icon {
