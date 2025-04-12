@@ -294,6 +294,8 @@ input:checked + .toggle:before {
       min-height: -webkit-fill-available;
       height: auto;
       background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
   }
 
   #chat-container {
