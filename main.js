@@ -832,7 +832,7 @@ document.getElementById('start-btn').addEventListener('click', () => {
     // Check if mic should be turned on
     const enableMic = document.getElementById('start-with-mic').checked;
     
-    displayReply("Привет! Я ваш виртуальный помощник. Чем могу помочь?", 'bot');
+    displayReply("Привет! Я могу рассказать о наших услугах. Что вы хотите узнать?", 'bot');
     
     // Turn on mic if the option was selected
     if (enableMic) {
