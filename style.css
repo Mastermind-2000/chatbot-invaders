@@ -102,7 +102,7 @@ button {
   background: #2883d6;
   color: white;
   border: none;
-  border-radius: 30px;
+  border-radius: 50px;
   cursor: pointer;
   font-family: 'Muller', Arial, sans-serif;
   font-weight: 500;
@@ -315,9 +315,12 @@ input:checked + .toggle:before {
     font-size: 16px;
     padding: 10px;
     border-radius: 16px;
+    flex: 1; /* Let the input take available space */
+    min-width: 0;
   }
 
   #chat-input-area {
+
     width: 100%;
   }
 
