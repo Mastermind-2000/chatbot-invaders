@@ -301,7 +301,6 @@ input:checked + .toggle:before {
   }
 
   #chat-container {
-    width: calc(100% - 32px); /* отступы по 16px с каждой стороны */
     left: 16px;
     right: 16px;
     transform: none;
