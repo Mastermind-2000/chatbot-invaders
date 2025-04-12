@@ -317,11 +317,14 @@ input:checked + .toggle:before {
     border-radius: 16px;
   }
 
+  #chat-input-area {
+    width: 100%;
+  }
+
   #send-btn, #mic-btn {
     font-size: 16px;
     padding: 10px 16px;
     margin-left: 6px;
-    border-radius: 16px;
   }
 
   #mic-btn {
