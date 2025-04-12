@@ -853,18 +853,3 @@ document.getElementById('start-btn').addEventListener('click', () => {
     // Update renderer size
     renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
   });
-
-// Fix for mobile viewport height
-function setVH() {
-  // Get the actual viewport height
-  let vh = window.innerHeight * 0.01;
-  // Set the --vh custom property
-  document.documentElement.style.setProperty('--vh', `${vh}px`);
-}
-
-// Set the height on page load
-setVH();
-// Update the height on resize
-window.addEventListener('resize', setVH);
-// Update on orientation change
-window.addEventListener('orientationchange', setVH);
