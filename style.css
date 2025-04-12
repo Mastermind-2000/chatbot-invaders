@@ -109,8 +109,6 @@ button {
 }
 
 .mic-icon {
-  width: 24px;
-  height: 24px;
   transition: color 0.3s ease;
 }
 
@@ -124,6 +122,16 @@ button {
   padding: 8px;
   border-radius: 50%;
   transition: background-color 0.3s ease;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+#mic-btn svg {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 
 #mic-btn:hover {
@@ -198,7 +206,7 @@ input:checked + .toggle:before {
   color: white;
   border: none;
   border-radius: 20px;
-  padding: 12px 24px;
+  padding: 12px 28px;
   font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -262,6 +270,12 @@ input:checked + .toggle:before {
 
 /* Responsive adjustments for mobile devices */
 @media (max-width: 768px) {
+    body {
+      min-height: 100vh, -webkit-fill-available;
+      height: auto;
+      background-size: cover;
+  }
+
   #chat-container {
     width: calc(100% - 32px); /* отступы по 16px с каждой стороны */
     left: 16px;
@@ -306,6 +320,7 @@ input:checked + .toggle:before {
   .welcome-modal {
     max-width: calc(100% - 32px); /* отступы по 16px слева и справа */
     padding: 20px;
+    margin: 0 16px; /* отступы по 16px слева и справа */
     border-radius: 10px;
   }
 
@@ -320,13 +335,19 @@ input:checked + .toggle:before {
   }
 
   .mic-option {
-    flex-direction: column;
+    display: flex;
+    flex-wrap: nowrap;
     align-items: flex-start;
-    gap: 10px;
   }
 
   .toggle-label {
     font-size: 15px;
+    line-height: 2em;
+    text-align: left;
+  }
+
+  .toggle-switch {
+    flex-shrink: 0;
   }
 
   #start-btn {
