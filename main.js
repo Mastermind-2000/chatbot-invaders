@@ -881,7 +881,7 @@ function onWindowResize() {
       } else if (screenWidth < 768) {
           model.scale.set(1.5, 1.5, 1.5); // Tablets/small phones
       } else {
-          model.scale.set(1, 1, 1); // Desktop
+          model.scale.set(1.8, 1.8, 1.8); // Desktop
       }
       // console.log(`Resized: Width ${screenWidth}, new scale applied.`); // Можно раскомментировать для отладки
   }
