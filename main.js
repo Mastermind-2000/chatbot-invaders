@@ -826,23 +826,28 @@ const isEdge = navigator.userAgent.indexOf("Edge") > -1 ||
 navigator.userAgent.indexOf("Edg/") > -1;
 
 //Welcome message
+// Mic icon toggle handler
+document.getElementById('start-mic-btn').addEventListener('click', function () {
+  this.classList.toggle('active');
+});
+
+// Start button handler (modified to use the new mic icon state)
 document.getElementById('start-btn').addEventListener('click', () => {
-    document.getElementById('start-overlay').style.display = 'none';
-    
-    // Check if mic should be turned on
-    const enableMic = document.getElementById('start-with-mic').checked;
-    
-    displayReply("Привет! Я могу рассказать о наших услугах. Что вы хотите узнать?", 'bot');
-    
-    // Turn on mic if the option was selected
-    if (enableMic) {
-      setTimeout(() => {
-        microphoneActive = true;
-        updateMicButtonState();
-        startRecognition();
-      }, 2000); // Short delay after greeting
-    }
-  });
+  document.getElementById('start-overlay').style.display = 'none';
+
+  const micBtn = document.getElementById('start-mic-btn');
+  const enableMic = micBtn.classList.contains('active');
+
+  displayReply("Привет! Я могу рассказать о наших услугах. Что вы хотите узнать?", 'bot');
+
+  if (enableMic) {
+    setTimeout(() => {
+      microphoneActive = true;
+      updateMicButtonState();
+      startRecognition();
+    }, 2000);
+  }
+});
 
   // 3D scene responsivness
   window.addEventListener('resize', function() {

@@ -19,11 +19,15 @@
         <p>Приветствую, землянин! Я — ваш личный консультант. Помогу разобраться в наших возможностях и технологиях</p>
         
         <div class="mic-option">
-            <div class="toggle-label">Активировать голосовой канал</div>
-            <label class="toggle-switch">
-                <input type="checkbox" id="start-with-mic">
-                <span class="toggle"></span>
-            </label>
+          <div class="toggle-label">Активировать голосовой канал</div>
+          <button id="start-mic-btn" class="mic-toggle-btn">
+            <div class="icon-container">
+              <svg id="start-mic-icon" class="mic-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z" fill="#21324A"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z" fill="#21324A"/>
+              </svg>
+            </div>
+          </button>
         </div>
 
         <p class="volume-hint">
@@ -37,7 +41,7 @@
     </div>
   </div>
 
-  <!-- Chat container will be placed here by your existing code -->
+  <!-- Chat container -->
   <div id="chat-container">
       <div id="chat-messages"></div>
       <div id="chat-input-area">
