@@ -855,12 +855,10 @@ document.getElementById('start-btn').addEventListener('click', () => {
   displayReply("Привет! Я могу рассказать о наших услугах. Что вы хотите узнать?", 'bot');
 
   if (enableMic) {
-    setTimeout(() => {
-      microphoneActive = true;
-      updateMicButtonState();
-      startRecognition();
-    }, 2000);
-  }
+    console.log("Mic enabled on start, setting microphoneActive = true immediately.");
+    microphoneActive = true; // Устанавливаем флаг немедленно
+    updateMicButtonState();    // Обновляем UI кнопки в чате
+}
 });
 
 // === Resize Handler Function ===
