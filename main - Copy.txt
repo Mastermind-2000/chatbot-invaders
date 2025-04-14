@@ -24,9 +24,23 @@ const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
 fillLight2.position.set(8, -10, 4);
 scene.add(fillLight2);
 
+// === Debounce Helper Function ===
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+      const later = () => {
+          clearTimeout(timeout);
+          func(...args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+  };
+};
+
 // === Animation Mixer, Clock, and Cached Resources ===
 const clock = new THREE.Clock();
 let mixer;
+let model;
 let faceMaterial; // Variable to cache the target material
 let idleTexture, thinkingTexture, talkingTexture; // Variables to cache video textures
 let loadedAnimations = []; // Store loaded animations
@@ -37,7 +51,7 @@ const loader = new THREE.GLTFLoader();
 loader.load(
     'assets/invader3d.gltf',
     (gltf) => {
-        const model = gltf.scene;
+        model = gltf.scene;
         model.rotation.y = -0.1;
         model.position.y = 1.5;
         scene.add(model);
@@ -849,12 +863,30 @@ document.getElementById('start-btn').addEventListener('click', () => {
   }
 });
 
-  // 3D scene responsivness
-  window.addEventListener('resize', function() {
-    // Update camera aspect ratio
-    camera.aspect = window.innerWidth / (window.innerHeight * 0.7);
-    camera.updateProjectionMatrix();
-    
-    // Update renderer size
-    renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
-  });
+// === Resize Handler Function ===
+function onWindowResize() {
+  // Update camera aspect ratio
+  camera.aspect = window.innerWidth / (window.innerHeight * 0.7);
+  camera.updateProjectionMatrix();
+
+  // Update renderer size
+  renderer.setSize(window.innerWidth, window.innerHeight * 0.7);
+
+  // Update model scale if model is loaded
+  if (model) { // Проверяем, загружена ли модель
+      const screenWidth = window.innerWidth;
+      // Логика масштабирования (скопирована из loader.load)
+      if (screenWidth < 500) {
+          model.scale.set(1.8, 1.8, 1.8); // Tiny screens
+      } else if (screenWidth < 768) {
+          model.scale.set(1.5, 1.5, 1.5); // Tablets/small phones
+      } else {
+          model.scale.set(1, 1, 1); // Desktop
+      }
+      // console.log(`Resized: Width ${screenWidth}, new scale applied.`); // Можно раскомментировать для отладки
+  }
+}
+
+// 3D scene responsivness
+// === Add Debounced Resize Listener ===
+window.addEventListener('resize', debounce(onWindowResize, 250)); // 250ms - задержка debounce
