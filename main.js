@@ -24,6 +24,11 @@ const fillLight2 = new THREE.DirectionalLight(0xffffff, 0.3);
 fillLight2.position.set(8, -10, 4);
 scene.add(fillLight2);
 
+// Переменные для обнаружения эха
+window.lastMessageWasLong = false;
+window.lastBotSpeakingTime = 0;
+window.lastBotSpeakingText = "";
+
 // === Debounce Helper Function ===
 function debounce(func, wait) {
   let timeout;
@@ -370,120 +375,116 @@ function displayReply(text, sender = 'bot') {
 let isBotSpeaking = false; // Flag to track if the bot is currently speaking
 
 function speak(text) {
-    // Preprocess text before speaking
-    const processedText = preprocessTextForSpeech(text);
-    
-    // 1. STOP recognition explicitly when bot starts speaking
-    console.log("Bot starting to speak, stopping recognition if active.");
-    stopRecognition(); // Stop listening
+  // Предобработка текста перед произнесением
+  const processedText = preprocessTextForSpeech(text);
   
-    window.speechSynthesis.cancel(); // Cancel any previous speech
-    setCharacterState('talking');
-    isBotSpeaking = true; // Set flag: Bot IS speaking
-    console.log("isBotSpeaking flag set to true.");
+  // Определяем, длинное ли это сообщение
+  const isLongMessage = processedText.length > 150; // Порог в 150 символов
+  console.log(`Сообщение бота ${isLongMessage ? 'длинное' : 'короткое'}, длина: ${processedText.length}`);
   
-    const utterance = new SpeechSynthesisUtterance(processedText);
-    utterance.lang = 'ru-RU';
+  // Сохраняем информацию о длине
+  window.lastMessageWasLong = isLongMessage;
+  window.lastBotSpeakingText = processedText;
   
-    // Add safety timeout to ensure animation and flags reset even if speech events fail
-    const speechTimeout = setTimeout(() => {
-      console.log("Speech safety timeout triggered - forcing reset");
-      resetAfterSpeech();
-    }, Math.max(20000, processedText.length * 50)); // Roughly estimate max speech time based on text length
-  
-    // Add an additional check for speech that might be stalled
-    let lastBoundaryTime = Date.now();
-    const progressCheckInterval = setInterval(() => {
-      const timeSinceLastBoundary = Date.now() - lastBoundaryTime;
-      if (timeSinceLastBoundary > 5000 && isBotSpeaking) {
-        console.warn("Speech appears stalled - no boundaries for 5 seconds");
-        clearInterval(progressCheckInterval);
-        clearTimeout(speechTimeout);
-        resetAfterSpeech();
-      }
-    }, 2000);
-  
-    // Normal end event handler
-utterance.onend = () => {
-  console.log("Bot finished speaking (utterance.onend).");
-  clearTimeout(speechTimeout); // Clear the safety timeout
-  clearInterval(progressCheckInterval);
-  
-  // Set character to idle state immediately
-  setCharacterState('idle');
-  
-  // Add a simple fixed delay before allowing recognition to restart
-  setTimeout(() => {
-    isBotSpeaking = false;
-    console.log("isBotSpeaking flag set to false.");
-    
-    // If microphone should be active, restart recognition with a delay
-    if (microphoneActive) {
-      console.log("After speech reset: restarting recognition");
-      setTimeout(() => {
-        startRecognition();
-      }, 300); // Short delay to prevent picking up speech end
-    }
-  }, 400); // Delay after speech ends before allowing recognition
-};
-  
-    // Error handler
-    utterance.onerror = (event) => {
-      console.error("SpeechSynthesis Error:", event.error);
-      clearTimeout(speechTimeout); // Clear the safety timeout
-      clearInterval(progressCheckInterval);
-      resetAfterSpeech();
-    };
-  
-    // Handle speech boundary events to detect progress
-    utterance.onboundary = () => {
-      lastBoundaryTime = Date.now();
-    };
-  
-    // Function to handle cleanup after speech (whether successful or interrupted)
-    function resetAfterSpeech() {
-      setCharacterState('idle');
-      
-      // Small delay before resetting flags and restarting recognition
-      setTimeout(() => {
-        isBotSpeaking = false;
-        console.log("isBotSpeaking flag set to false.");
-  
-        // Force recognition system to a clean state
-        if (recognition) {
-          try {
-            recognition.abort(); // Force stop if somehow still running
-          } catch (e) {
-            console.log("Error during forced recognition abort:", e);
-          }
-          recognitionActive = false;
-        }
-  
-        // If the microphone should be active, restart recognition
-        if (microphoneActive) {
-          console.log("After speech reset: restarting recognition because microphoneActive is true.");
-          setTimeout(() => {
-            startRecognition();
-          }, 700);
-        }
-      }, 500);
-    }
-  
-    // Start speaking
-const selectedVoice = getPreferredVoice();
-if (selectedVoice) {
-  utterance.voice = selectedVoice;
-  
-  // Adjust pitch and rate for male character sound
-  // Lower values for more masculine sound (experiment with these)
-  utterance.pitch = 0.8;
-  utterance.rate = 1.4;
-} else {
-  console.warn("No voice selected, using browser default");
-}
+  // 1. STOP recognition explicitly when bot starts speaking
+  console.log("Bot starting to speak, stopping recognition if active.");
+  stopRecognition(); // Stop listening
 
-speechSynthesis.speak(utterance);
+  window.speechSynthesis.cancel(); // Cancel any previous speech
+  setCharacterState('talking');
+  isBotSpeaking = true; // Set flag: Bot IS speaking
+  console.log("isBotSpeaking flag set to true.");
+
+  const utterance = new SpeechSynthesisUtterance(processedText);
+  utterance.lang = 'ru-RU';
+
+  // Add safety timeout to ensure animation and flags reset even if speech events fail
+  const speechTimeout = setTimeout(() => {
+    console.log("Speech safety timeout triggered - forcing reset");
+    finishSpeaking();
+  }, Math.max(20000, processedText.length * 50)); // Roughly estimate max speech time based on text length
+
+  // Add an additional check for speech that might be stalled
+  let lastBoundaryTime = Date.now();
+  const progressCheckInterval = setInterval(() => {
+    const timeSinceLastBoundary = Date.now() - lastBoundaryTime;
+    if (timeSinceLastBoundary > 5000 && isBotSpeaking) {
+      console.warn("Speech appears stalled - no boundaries for 5 seconds");
+      clearInterval(progressCheckInterval);
+      clearTimeout(speechTimeout);
+      finishSpeaking();
+    }
+  }, 2000);
+
+  // Function to handle cleanup after speech (whether successful or interrupted)
+  function finishSpeaking() {
+    setCharacterState('idle');
+    
+    // Different delay based on message length
+    const delay = window.lastMessageWasLong ? 800 : 400; // Longer for long messages
+    
+    setTimeout(() => {
+      isBotSpeaking = false;
+      console.log(`isBotSpeaking flag set to false (after ${delay}ms delay).`);
+      
+      // Save time when speech ended
+      window.lastBotSpeakingTime = Date.now();
+      
+      // Force recognition system to a clean state
+      if (recognition) {
+        try {
+          recognition.abort(); // Force stop if somehow still running
+        } catch (e) {
+          console.log("Error during forced recognition abort:", e);
+        }
+        recognitionActive = false;
+      }
+
+      // If the microphone should be active, restart recognition with variable delay
+      if (microphoneActive) {
+        console.log("After speech reset: restarting recognition");
+        setTimeout(() => {
+          if (microphoneActive) startRecognition();
+        }, window.lastMessageWasLong ? 700 : 300); // Additional delay for long messages
+      }
+    }, delay);
   }
+
+  // Normal end event handler
+  utterance.onend = () => {
+    console.log("Bot finished speaking (utterance.onend).");
+    clearTimeout(speechTimeout); // Clear the safety timeout
+    clearInterval(progressCheckInterval);
+    finishSpeaking();
+  };
+
+  // Error handler
+  utterance.onerror = (event) => {
+    console.error("SpeechSynthesis Error:", event.error);
+    clearTimeout(speechTimeout); // Clear the safety timeout
+    clearInterval(progressCheckInterval);
+    finishSpeaking();
+  };
+
+  // Handle speech boundary events to detect progress
+  utterance.onboundary = () => {
+    lastBoundaryTime = Date.now();
+  };
+
+  // Start speaking
+  const selectedVoice = getPreferredVoice();
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+    
+    // Adjust pitch and rate for male character sound
+    utterance.pitch = 0.8;
+    utterance.rate = 1.4;
+  } else {
+    console.warn("No voice selected, using browser default");
+  }
+
+  speechSynthesis.speak(utterance);
+}
 
 // === Webhook Communication (Improved Error Handling) ===
 const sessionId = localStorage.getItem("chatSessionId") || crypto.randomUUID();
@@ -654,42 +655,62 @@ try {
 
 
       recognition.onresult = async (event) => {
-           // ** Check bot speaking flag FIRST **
-           if (isBotSpeaking) {
-              console.log("Ignored 'onresult' because bot is speaking.");
-              return; // Ignore result completely
-           }
-
-          const voiceInput = event.results[0][0].transcript.trim();
-          console.log("Recognition result received:", voiceInput);
-
-           if (!voiceInput) {
-               console.log("Empty recognition result, ignoring.");
-               return; // Ignore empty results
-           }
-
-          // Process the valid input
-          displayReply(voiceInput, 'user');
-          setCharacterState("thinking");
-
-          try {
-              const botReply = await sendToWebhook(voiceInput);
-              // Check AGAIN if bot might have started speaking somehow
-              // (less likely now but good safety check)
-              if (!isBotSpeaking) {
-                  displayReply(botReply, 'bot');
-              } else {
-                  console.log("Bot started speaking before webhook reply could be displayed/spoken.");
-                  setCharacterState("idle");
-              }
-          } catch (error) {
-               console.error("Error processing webhook reply after voice input:", error);
-               if (!isBotSpeaking) { // Display error only if bot silent
-                    displayReply(error.message || "Sorry, there was an error processing my reply.", 'bot');
-               }
-               setCharacterState('idle');
-          }
-      };
+        // Check bot speaking flag FIRST
+        if (isBotSpeaking) {
+           console.log("Ignored 'onresult' because bot is speaking.");
+           return; // Ignore result completely
+        }
+     
+        const voiceInput = event.results[0][0].transcript.trim();
+        const confidence = event.results[0][0].confidence;
+        console.log(`Recognition result: "${voiceInput}" (confidence: ${confidence})`);
+     
+        if (!voiceInput) {
+            console.log("Empty recognition result, ignoring.");
+            return; // Ignore empty results
+        }
+        
+        // Check for echo, but only for long messages and soon after speech
+        const timeSinceBotSpeaking = Date.now() - (window.lastBotSpeakingTime || 0);
+        if (window.lastMessageWasLong && timeSinceBotSpeaking < 1500) {
+            // For long messages, use more aggressive echo detection
+            const lastBotText = window.lastBotSpeakingText || "";
+            
+            // Check if recognized text is contained in the end of bot's message
+            const normalizedInput = voiceInput.toLowerCase();
+            const normalizedBotText = lastBotText.toLowerCase();
+            
+            // Look for matches in the last third of the bot's message
+            const lastThird = normalizedBotText.slice(normalizedBotText.length * 2/3);
+            
+            // If a match is found and it's not too short
+            if (normalizedInput.length > 3 && lastThird.includes(normalizedInput)) {
+                console.log("Echo detected in the end of a long message:", voiceInput);
+                return; // Ignore this echo
+            }
+        }
+     
+        // Process the valid input
+        displayReply(voiceInput, 'user');
+        setCharacterState("thinking");
+     
+        try {
+            const botReply = await sendToWebhook(voiceInput);
+            // Check AGAIN if bot might have started speaking somehow
+            if (!isBotSpeaking) {
+                displayReply(botReply, 'bot');
+            } else {
+                console.log("Bot started speaking before webhook reply could be displayed/spoken.");
+                setCharacterState("idle");
+            }
+        } catch (error) {
+             console.error("Error processing webhook reply after voice input:", error);
+             if (!isBotSpeaking) { // Display error only if bot silent
+                  displayReply(error.message || "Sorry, there was an error processing my reply.", 'bot');
+             }
+             setCharacterState('idle');
+        }
+     };
 
       recognition.onerror = (event) => {
           console.error(`Speech recognition error: ${event.error}`, event.message || '(no message)');

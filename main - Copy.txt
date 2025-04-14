@@ -64,7 +64,7 @@ loader.load(
         } else if (screenWidth < 768) {
          model.scale.set(1.5, 1.5, 1.5); // Tablets/small phones
         } else {
-         model.scale.set(1, 1, 1); // Desktop
+         model.scale.set(1.8, 1.8, 1.8); // Desktop
         }
 
         // --- Animation Setup ---
@@ -404,12 +404,28 @@ function speak(text) {
     }, 2000);
   
     // Normal end event handler
-    utterance.onend = () => {
-      console.log("Bot finished speaking (utterance.onend).");
-      clearTimeout(speechTimeout); // Clear the safety timeout
-      clearInterval(progressCheckInterval);
-      resetAfterSpeech();
-    };
+utterance.onend = () => {
+  console.log("Bot finished speaking (utterance.onend).");
+  clearTimeout(speechTimeout); // Clear the safety timeout
+  clearInterval(progressCheckInterval);
+  
+  // Set character to idle state immediately
+  setCharacterState('idle');
+  
+  // Add a simple fixed delay before allowing recognition to restart
+  setTimeout(() => {
+    isBotSpeaking = false;
+    console.log("isBotSpeaking flag set to false.");
+    
+    // If microphone should be active, restart recognition with a delay
+    if (microphoneActive) {
+      console.log("After speech reset: restarting recognition");
+      setTimeout(() => {
+        startRecognition();
+      }, 300); // Short delay to prevent picking up speech end
+    }
+  }, 400); // Delay after speech ends before allowing recognition
+};
   
     // Error handler
     utterance.onerror = (event) => {
@@ -855,12 +871,10 @@ document.getElementById('start-btn').addEventListener('click', () => {
   displayReply("Привет! Я могу рассказать о наших услугах. Что вы хотите узнать?", 'bot');
 
   if (enableMic) {
-    setTimeout(() => {
-      microphoneActive = true;
-      updateMicButtonState();
-      startRecognition();
-    }, 2000);
-  }
+    console.log("Mic enabled on start, setting microphoneActive = true immediately.");
+    microphoneActive = true; // Устанавливаем флаг немедленно
+    updateMicButtonState();    // Обновляем UI кнопки в чате
+}
 });
 
 // === Resize Handler Function ===
@@ -881,7 +895,7 @@ function onWindowResize() {
       } else if (screenWidth < 768) {
           model.scale.set(1.5, 1.5, 1.5); // Tablets/small phones
       } else {
-          model.scale.set(1, 1, 1); // Desktop
+          model.scale.set(1.8, 1.8, 1.8); // Desktop
       }
       // console.log(`Resized: Width ${screenWidth}, new scale applied.`); // Можно раскомментировать для отладки
   }
