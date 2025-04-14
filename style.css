@@ -151,7 +151,7 @@ button {
 
 /* Mic button in welcome modal */
 #start-mic-btn {
-  background-color: #f0f0f0;
+  background-color: #e3e3e3;
   border: none;
   border-radius: 50%;
   padding: 10px;
@@ -164,11 +164,21 @@ button {
 }
 
 #start-mic-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #c7c7c7;
 }
 
 #start-mic-btn.active {
   background-color: #ff4b4b;
+}
+
+#start-mic-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: #21324A;
+}
+
+#start-mic-btn.active svg {
+  fill: #ffffff;
 }
 
 #start-mic-btn .mic-icon {
