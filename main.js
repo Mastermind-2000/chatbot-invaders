@@ -925,3 +925,34 @@ function onWindowResize() {
 // 3D scene responsivness
 // === Add Debounced Resize Listener ===
 window.addEventListener('resize', debounce(onWindowResize, 250)); // 250ms - задержка debounce
+
+// Chat collapse functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const chatContainer = document.getElementById('chat-container');
+  const collapseHandle = document.getElementById('chat-collapse-handle');
+  const collapseIcon = document.getElementById('collapse-icon');
+  
+  // Initialize state from localStorage (if available)
+  const isChatCollapsed = localStorage.getItem('chatCollapsed') === 'true';
+  if (isChatCollapsed) {
+    chatContainer.classList.add('collapsed');
+  }
+  
+  collapseHandle.addEventListener('click', function() {
+    chatContainer.classList.toggle('collapsed');
+    
+    // Store state in localStorage
+    const isNowCollapsed = chatContainer.classList.contains('collapsed');
+    localStorage.setItem('chatCollapsed', isNowCollapsed);
+    
+    // If expanding and there are messages, scroll to bottom
+    if (!isNowCollapsed) {
+      const chatMessages = document.getElementById('chat-messages');
+      if (chatMessages.children.length > 0) {
+        setTimeout(() => {
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        }, 300); // Match the CSS transition time
+      }
+    }
+  });
+});

@@ -332,6 +332,50 @@ input:checked + .toggle:before {
     flex-shrink: 0;
 }
 
+#chat-collapse-handle {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 60px;
+  height: 24px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+#chat-collapse-handle:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+
+#collapse-icon {
+  transition: transform 0.3s ease;
+}
+
+#chat-messages {
+  transition: max-height 0.3s ease, opacity 0.2s ease, margin-bottom 0.3s ease;
+  overflow: hidden;
+}
+
+#chat-container.collapsed #chat-messages {
+  max-height: 0 !important;
+  opacity: 0;
+  margin-bottom: 0;
+}
+
+#chat-container.collapsed #chat-collapse-handle {
+  top: -24px;
+}
+
+#chat-container.collapsed #collapse-icon {
+  transform: rotate(180deg);
+}
+
 
 
 /* Responsive adjustments for mobile devices */
@@ -458,6 +502,21 @@ input:checked + .toggle:before {
     font-size: 16px;
     padding: 10px 20px;
     width: 100%; /* растянуть кнопку */
+  }
+
+  #chat-collapse-handle {
+    width: 50px;
+    height: 20px;
+    top: -12px;
+  }
+  
+  #collapse-icon {
+    width: 16px;
+    height: 16px;
+  }
+  
+  #chat-container.collapsed #chat-collapse-handle {
+    top: -20px;
   }
 
 }
