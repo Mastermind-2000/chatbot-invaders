@@ -1,0 +1,455 @@
+#EXTM3U
+#EXTINF:1 group-title="Эфир" tvg-id="pervy" tvg-shift="-4",Первый канал
+udp://@239.1.15.1:1234
+#EXTINF:2 group-title="Эфир" tvg-logo="https://iptvx.one/picons/pervy.png" tvg-id="pervy" tvg-shift="-4",Первый канал HD
+udp://@239.1.15.20:1234
+#EXTINF:3 group-title="Эфир" tvg-id="rossia1",РОССИЯ 1
+udp://@239.1.15.2:1234
+#EXTINF:4 group-title="Эфир" tvg-logo="https://iptvx.one/picons/rossia1.png" tvg-id="rossia1",Россия 1 HD
+udp://@239.1.10.22:1234
+#EXTINF:5 group-title="Эфир" tvg-logo="https://iptvx.one/picons/rentv.png" tvg-id="rentv",Рен ТВ
+udp://@239.1.15.5:1234
+#EXTINF:6 group-title="Эфир" tvg-logo="https://iptvx.one/picons/rentv-pl4.png" tvg-id="rentv-pl4",РенТВ (+4) HD
+udp://@239.1.1.25:1234
+#EXTINF:7 group-title="Эфир" tvg-id="tnt",ТНТ
+udp://@239.1.15.7:1234
+#EXTINF:8 group-title="Эфир" tvg-id="tnt",ТНТ HD
+udp://@239.1.21.55:1234
+#EXTINF:9 group-title="Эфир" tvg-id="tnt4",ТНТ4
+udp://@239.1.2.16:1234
+#EXTINF:10 group-title="Эфир" tvg-id="tnt4" tvg-shift="-2",ТНТ4 +2
+udp://@239.1.2.117:1234
+#EXTINF:11 group-title="Эфир" tvg-id="sts",СТС
+udp://@239.1.10.13:1234
+#EXTINF:12 group-title="Эфир" tvg-id="ntv" tvg-shift="-4",НТВ
+udp://@239.1.15.4:1234
+#EXTINF:13 group-title="Эфир" tvg-id="ntv",НТВ HD
+udp://@239.1.1.26:1234
+#EXTINF:14 group-title="Эфир" tvg-id="ntv-xit",НТВ Хит
+udp://@239.1.20.34:1234
+#EXTINF:15 group-title="Эфир" tvg-id="ntv-pravo",НТВ Право
+udp://@239.1.20.45:1234
+#EXTINF:16 group-title="Эфир" tvg-id="ntv-serial",НТВ Сериал
+udp://@239.1.20.39:1234
+#EXTINF:17 group-title="Эфир" tvg-id="ntv-style",НТВ Стиль HD
+udp://@239.1.1.47:1234
+#EXTINF:18 group-title="Эфир" tvg-id="tvcentr",ТВЦ
+udp://@239.1.15.10:1234
+#EXTINF:19 group-title="Эфир" tvg-logo="https://iptvx.one/picons/tv3-ru.png" tvg-id="tv3-ru",ТВ3
+udp://@239.1.10.4:1234
+#EXTINF:20 group-title="Эфир" tvg-id="5kanal-ru",Пятый канал
+udp://@239.1.10.3:1234
+#EXTINF:21 group-title="Эфир" tvg-logo="https://iptvx.one/picons/8kanal-novosibirsk.png" tvg-id="8kanal-novosibirsk",8 канал (Новосибирск)
+udp://@239.1.20.203:1234
+#EXTINF:22 group-title="Эфир" tvg-id="rossia-24",РОССИЯ 24
+udp://@239.1.15.3:1234
+#EXTINF:23 group-title="Эфир" tvg-id="kultura",Россия Культура
+udp://@239.1.10.7:1234
+#EXTINF:24 group-title="Эфир" tvg-logo="https://iptvx.one/picons/sibir24.png" tvg-id="sibir24",Сибирь 24
+udp://@239.1.1.52:1234
+#EXTINF:25 group-title="Эфир" tvg-id="che",Че
+udp://@239.1.15.14:1234
+#EXTINF:26 group-title="Эфир" tvg-id="vremia",Время
+udp://@239.1.5.4:1234
+#EXTINF:27 group-title="Эфир" tvg-id="mir",Мир
+udp://@239.1.15.31:1234
+#EXTINF:28 group-title="Эфир" tvg-id="mir-24",Мир 24
+udp://@239.1.1.3:1234
+#EXTINF:29 group-title="Эфир" tvg-id="otr" tvg-shift="-4",ОТР
+udp://@239.1.15.8:1234
+#EXTINF:30 group-title="Эфир" tvg-id="ots",ОТС
+udp://@239.1.21.50:1234
+#EXTINF:31 group-title="Эфир" tvg-id="doktor",Доктор
+udp://@239.1.20.3:1234
+#EXTINF:32 group-title="Эфир" tvg-id="doktor",Доктор HD
+udp://@239.1.1.64:1234
+#EXTINF:33 group-title="Эфир" tvg-id="domashny",Домашний
+udp://@239.1.10.5:1234
+#EXTINF:34 group-title="Эфир" tvg-id="simpleTVFakeEpgId",Психология
+udp://@239.1.2.9:1234
+#EXTINF:35 group-title="Эфир" tvg-id="yu",Ю
+udp://@239.1.15.18:1234
+#EXTINF:36 group-title="Эфир" tvg-id="piatnica",Пятница
+udp://@239.1.15.17:1234
+#EXTINF:37 group-title="Эфир" tvg-id="super" tvg-shift="-2",Суббота +2
+udp://@239.1.20.33:1234
+#EXTINF:38 group-title="Эфир" tvg-id="super" tvg-shift="-4",Суббота +4
+udp://@239.1.20.21:1234
+#EXTINF:39 group-title="Эфир" tvg-id="zhara",Жара
+udp://@239.1.21.61:1234
+#EXTINF:40 group-title="Эфир" tvg-logo="https://iptvx.one/picons/solnce-pl4.png" tvg-id="solnce-pl4",Солнце (+4)
+udp://@239.1.1.45:1234
+#EXTINF:41 group-title="Эфир" tvg-id="sts-love" tvg-shift="-4",СТС Love +4
+udp://@239.1.3.8:1234
+#EXTINF:42 group-title="Эфир" tvg-logo="https://iptvx.one/picons/kvn-tv.png" tvg-id="kvn-tv",КВН ТВ
+udp://@239.1.1.30:1234
+#EXTINF:83 group-title="Фильмы и сериалы" tvg-id="2na2" tvg-shift="-2",2X2 +2
+udp://@239.1.2.202:1234
+#EXTINF:84 group-title="Фильмы и сериалы" tvg-id="2na2" tvg-shift="-4",2X2 +4
+udp://@239.1.20.27:1234
+#EXTINF:43 group-title="Эфир" tvg-id="2na2" tvg-shift="-4",2X2 +4
+udp://@239.1.2.1:1234
+#EXTINF:44 group-title="Эфир" tvg-id="nostalgia",Ностальгия
+udp://@239.1.2.13:1234
+#EXTINF:45 group-title="Эфир" tvg-id="sarafan",Сарафан
+udp://@239.1.2.11:1234
+#EXTINF:46 group-title="Эфир" tvg-id="49kanal",49 Канал HD
+udp://@239.1.1.51:1234
+#EXTINF:47 group-title="Эфир" tvg-id="zhivi",Живи
+udp://@239.1.2.12:1234
+#EXTINF:48 group-title="Эфир" tvg-id="hd-life",HDL
+udp://@239.1.9.2:1234
+#EXTINF:49 group-title="Эфир" tvg-id="kluch",Ключ
+https://hls.peers.tv/streaming/klyuch/126/copy/playlist.m3u8
+#EXTINF:50 group-title="Эфир" tvg-logo="https://iptvx.one/picons/myzen-tv.png" tvg-id="myzen-tv",My Zen TV
+udp://@239.1.10.21:1234
+#EXTINF:51 group-title="Эфир" tvg-logo="https://iptvx.one/picons/myzen-4k.png" tvg-id="myzen-4k",MyZen UHD
+udp://@239.1.22.7:1234
+#EXTINF:52 group-title="Эфир" tvg-logo="https://iptvx.one/picons/360-podmoskovie.png" tvg-id="360-podmoskovie",360
+udp://@239.1.1.63:1234
+#EXTINF:53 group-title="Эфир" tvg-id="365-dnej",365 дней HD
+udp://@239.1.5.20:1234
+#EXTINF:54 group-title="Эфир" tvg-id="museum-hd",MUSEUM TV
+udp://@239.1.1.21:1234
+#EXTINF:55 group-title="Эфир" tvg-id="poexali",Поехали
+udp://@239.1.1.29:1234
+#EXTINF:56 group-title="Эфир" tvg-id="otkryty-mir",Открытый мир
+udp://@239.1.5.24:1234
+#EXTINF:58 group-title="Эфир" tvg-id="bobior",Бобер
+udp://@239.1.2.19:1234
+#EXTINF:59 group-title="Эфир" tvg-id="usadba",Усадьба
+udp://@239.1.2.17:1234
+#EXTINF:60 group-title="Эфир" tvg-id="pervy-vegetariansky",Первый Вегетарианский
+udp://@239.1.20.31:1234
+#EXTINF:61 group-title="Эфир" tvg-id="telekafe",Телекафе
+udp://@239.1.2.18:1234
+#EXTINF:62 group-title="Эфир" tvg-id="simpleTVFakeEpgId",Food Time
+udp://@239.1.17.10:1234
+#EXTINF:63 group-title="Эфир" tvg-id="simpleTVFakeEpgId",Кухня HD
+udp://@239.1.1.73:1234
+#EXTINF:64 group-title="Эфир" tvg-id="star-family",STAR FAMILY
+udp://@239.1.1.36:1234
+#EXTINF:65 group-title="Эфир" tvg-id="zvezda",Звезда
+udp://@239.1.15.9:1234
+#EXTINF:66 group-title="Эфир" tvg-id="o_",О!
+udp://@239.1.21.85:1234
+#EXTINF:67 group-title="Эфир" tvg-id="sdelano-kuzbass",Сделано в Кузбассе HD
+udp://@239.1.17.24:1234
+#EXTINF:68 group-title="Эфир" tvg-id="pobeda",Победа
+udp://@239.1.21.68:1234
+#EXTINF:69 group-title="Эфир" tvg-id="ldpr-tv",ЛДПР ТВ
+udp://@239.1.20.9:1234
+#EXTINF:70 group-title="Эфир" tvg-id="krasnaya-linia",Красная линия
+udp://@239.1.20.223:1234
+#EXTINF:71 group-title="Эфир" tvg-id="rbk",РБК HD
+udp://@239.1.1.75:1234
+#EXTINF:72 group-title="Эфир" tvg-id="uspex",Успех
+udp://@239.1.2.3:1234
+#EXTINF:73 group-title="Эфир" tvg-id="sankt-peterburg",Санкт-Петербург
+udp://@239.1.20.8:1234
+#EXTINF:74 group-title="Эфир" tvg-logo="https://iptvx.one/picons/krik-tv.png" tvg-id="krik-tv",Крик-ТВ
+udp://@239.1.20.30:1234
+#EXTINF:75 group-title="Эфир" tvg-id="simpleTVFakeEpgId",RUSSIA TODAY DOC HD
+udp://@239.1.9.5:1234
+#EXTINF:76 group-title="Эфир" tvg-id="rt-news",RUSSIA TODAY
+udp://@239.1.1.34:1234
+#EXTINF:77 group-title="Эфир" tvg-id="izvestia",Известия HD
+udp://@239.1.1.43:1234
+#EXTINF:78 group-title="Эфир" tvg-logo="https://iptvx.one/picons/tnv.png" tvg-id="tnv-planeta",ТНВ-Планета
+udp://@239.1.21.5:1234
+#EXTINF:79 group-title="Эфир" tvg-logo="https://iptvx.one/picons/tnv-tat.png" tvg-id="tnv",ТНВ Татарстан
+udp://@239.1.21.4:1234
+#EXTINF:157 group-title="Познавательные" tvg-id="nauka-20",Наука 2.0
+udp://@239.1.5.18:1234
+#EXTINF:158 group-title="Познавательные" tvg-id="nauka-20",Наука 2.0 HD
+udp://@239.1.1.72:1234
+#EXTINF:159 group-title="Познавательные" tvg-id="simpleTVFakeEpgId",GALAXY
+udp://@239.1.20.56:1234
+#EXTINF:160 group-title="Познавательные" tvg-id="istoria",История
+udp://@239.1.5.21:1234
+#EXTINF:161 group-title="Познавательные" tvg-id="docubox-hd",Docubox HD
+udp://@239.1.1.39:1234
+#EXTINF:162 group-title="Познавательные" tvg-logo="https://epgx.site/p/viasat-history.png" tvg-id="viasat-history",viju History HD
+udp://@239.1.21.34:1234
+#EXTINF:163 group-title="Познавательные" tvg-logo="https://epgx.site/p/viasat-nature.png" tvg-id="viasat-nature",viju Nature HD
+udp://@239.1.21.36:1234
+#EXTINF:164 group-title="Познавательные" tvg-logo="https://epgx.site/p/viasat-explore.png" tvg-id="viasat-explore",viju Explore
+udp://@239.1.21.35:1234
+#EXTINF:165 group-title="Познавательные" tvg-logo="https://epgx.site/p/viasat-nature-history-hd.png" tvg-id="viasat-nature-history-hd",viju+ Planet
+udp://@239.1.1.40:1234
+#EXTINF:166 group-title="Познавательные" tvg-id="texno-24",Т24
+udp://@239.1.5.10:1234
+#EXTINF:167 group-title="Познавательные" tvg-id="ege-tv",ЕГЭ
+udp://@239.1.20.156:1234
+#EXTINF:168 group-title="Познавательные" tvg-id="da-vinci",Da Vinci
+udp://@239.1.5.6:1234
+#EXTINF:169 group-title="Познавательные" tvg-logo="https://epgx.site/p/terra-ru.png" tvg-id="terra-ru",TERRA HD
+udp://@239.1.1.58:1234
+#EXTINF:170 group-title="Познавательные" tvg-logo="https://epgx.site/p/terra-ru.png" tvg-id="terra-ru",TERRA
+udp://@239.1.1.55:1234
+#EXTINF:171 group-title="Познавательные" tvg-id="english-class",English Class
+udp://@239.1.20.35:1234
+#EXTINF:172 group-title="Познавательные" tvg-logo="https://epgx.site/p/travel-adventure.png" tvg-id="travel-adventure",Travel+Adventure
+udp://@239.1.5.7:1234
+#EXTINF:173 group-title="Познавательные" tvg-id="travel-adventure",Travel+Adventure HD
+udp://@239.1.17.4:1234
+#EXTINF:174 group-title="Познавательные" tvg-id="moya-planeta",Моя планета
+udp://@239.1.5.17:1234
+#EXTINF:175 group-title="Познавательные" tvg-id="simpleTVFakeEpgId",Russian Travel Guide
+udp://@239.1.5.13:1234
+#EXTINF:176 group-title="Познавательные" tvg-id="rtg-tv",RTG HD
+udp://@239.1.17.22:1234
+#EXTINF:177 group-title="Познавательные" tvg-id="glazami-turista",Глазами туриста
+udp://@239.1.1.6:1234
+#EXTINF:178 group-title="Познавательные" tvg-id="glazami-turista-4k",Глазами туриста 4k
+udp://@239.1.22.6:1234
+#EXTINF:179 group-title="Познавательные" tvg-id="simpleTVFakeEpgId",КтоКуда
+udp://@239.1.5.22:1234
+#EXTINF:180 group-title="Познавательные" tvg-id="bolshaya-azia",Большая Азия
+udp://@239.1.3.9:1234
+#EXTINF:181 group-title="Познавательные" tvg-id="prikluchenia-hd",ПРИКЛЮЧЕНИЯ HD
+udp://@239.1.17.11:1234
+#EXTINF:182 group-title="Познавательные" tvg-id="nasha-tema",Наша тема HD
+udp://@239.1.1.23:1234
+#EXTINF:183 group-title="Познавательные" tvg-id="teleputeshestvia",ТЕЛЕПУТЕШЕСТВИЯ
+udp://@239.1.20.28:1234
+#EXTINF:184 group-title="Познавательные" tvg-id="radost-moya",Радость моя
+udp://@239.1.20.52:1234
+#EXTINF:185 group-title="Познавательные" tvg-id="nasha-sibir-4k",Наша Сибирь 4K
+udp://@239.1.22.5:1234
+#EXTINF:186 group-title="Познавательные" tvg-id="zootv",Зоо ТВ
+udp://@239.1.21.16:1234
+#EXTINF:187 group-title="Познавательные" tvg-id="v-mire-zhivotnyx-hd",В мире животных
+udp://@239.1.21.12:1234
+#EXTINF:188 group-title="Познавательные" tvg-id="zhivaya-planeta",Живая планета
+udp://@239.1.5.23:1234
+#EXTINF:189 group-title="Познавательные" tvg-id="zhivaya-priroda",Живая природа
+udp://@239.1.1.4:1234
+#EXTINF:85 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sony-scifi.png" tvg-id="sony-scifi",.sci-fi
+udp://@239.1.4.7:1234
+#EXTINF:86 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sony.png" tvg-id="sony-tv",.red
+udp://@239.1.4.6:1234
+#EXTINF:87 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sony.png" tvg-id="sony-tv",.red HD
+udp://@239.1.17.18:1234
+#EXTINF:88 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sony-turbo.png" tvg-id="sony-turbo",.black
+udp://@239.1.4.9:1234
+#EXTINF:89 group-title="Фильмы и сериалы" tvg-id="kino-tv",Кино ТВ
+udp://@239.1.4.12:1234
+#EXTINF:90 group-title="Фильмы и сериалы" tvg-id="kino-tv",Кино ТВ HD
+udp://@239.1.17.13:1234
+#EXTINF:91 group-title="Фильмы и сериалы" tvg-id="kinopokaz",Кинопоказ
+udp://@239.1.21.20:1234
+#EXTINF:92 group-title="Фильмы и сериалы" tvg-id="russkaya-komedia",Комедия
+udp://@239.1.1.49:1234
+#EXTINF:93 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000.png" tvg-id="tv1000",viju TV1000
+udp://@239.1.21.31:1234
+#EXTINF:94 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000.png" tvg-id="tv1000",viju TV1000 HD
+udp://@239.1.1.70:1234
+#EXTINF:95 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000-action.png" tvg-id="tv1000-action",viju TV1000 Action
+udp://@239.1.21.33:1234
+#EXTINF:96 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000-action.png" tvg-id="tv1000-action",viju TV1000 Action HD
+udp://@239.1.1.79:1234
+#EXTINF:97 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000-russkoe-kino.png" tvg-id="tv1000-russkoe-kino",viju TV1000 Русское кино
+udp://@239.1.21.32:1234
+#EXTINF:98 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tv1000-russkoe-kino.png" tvg-id="tv1000-russkoe-kino",viju TV1000 Русское кино HD
+udp://@239.1.1.71:1234
+#EXTINF:99 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/vip-serial.png" tvg-id="vip-serial",viju+ Serial HD
+udp://@239.1.21.42:1234
+#EXTINF:100 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/vip-comedy.png" tvg-id="vip-comedy",viju+ Comedy
+udp://@239.1.21.40:1234
+#EXTINF:101 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/vip-megahit.png" tvg-id="vip-megahit",viju+ Megahit
+udp://@239.1.21.39:1234
+#EXTINF:102 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/vip-premiere.png" tvg-id="vip-premiere",viju+ Premiere
+udp://@239.1.21.38:1234
+#EXTINF:103 group-title="Фильмы и сериалы" tvg-id="nashe-novoe-kino",Наше Новое кино
+udp://@239.1.1.84:1234
+#EXTINF:104 group-title="Фильмы и сериалы" tvg-id="nashe-novoe-kino",Наше новое кино HD
+udp://@239.1.21.30:1234
+#EXTINF:105 group-title="Фильмы и сериалы" tvg-id="kinokomedia",Кинокомедия
+udp://@239.1.4.3:1234
+#EXTINF:106 group-title="Фильмы и сериалы" tvg-id="kinokomedia",Кинокомедия HD
+udp://@239.1.1.83:1234
+#EXTINF:107 group-title="Фильмы и сериалы" tvg-id="indiyskoe-kino",Индийское кино
+udp://@239.1.3.15:1234
+#EXTINF:108 group-title="Фильмы и сериалы" tvg-id="kinopremiera-hd",Кинопремьера
+udp://@239.1.21.26:1234
+#EXTINF:109 group-title="Фильмы и сериалы" tvg-id="kinosvidanie",Киносвидание
+udp://@239.1.1.80:1234
+#EXTINF:110 group-title="Фильмы и сериалы" tvg-id="kinosemiya",Киносемья
+udp://@239.1.1.81:1234
+#EXTINF:111 group-title="Фильмы и сериалы" tvg-id="kinomiks",Киномикс
+udp://@239.1.1.32:1234
+#EXTINF:112 group-title="Фильмы и сериалы" tvg-id="kinoxit",Кинохит
+udp://@239.1.1.82:1234
+#EXTINF:113 group-title="Фильмы и сериалы" tvg-id="kinoseria",Киносерия
+https://hls.peers.tv/streaming/kinoseriya/16/vh1w/playlist.m3u8
+#EXTINF:114 group-title="Фильмы и сериалы" tvg-id="muzhskoe-kino",Мужское кино
+udp://@239.1.1.16:1234
+#EXTINF:115 group-title="Фильмы и сериалы" tvg-id="evrokino",Еврокино
+udp://@239.1.20.101:1234
+#EXTINF:116 group-title="Фильмы и сериалы" tvg-id="domkino-premium",ДОМ КИНО ПРЕМИУМ HD
+udp://@239.1.17.23:1234
+#EXTINF:117 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/mosfilm.png" tvg-id="mosfilm",Мосфильм. Золотая коллекция
+udp://@239.1.1.7:1234
+#EXTINF:118 group-title="Фильмы и сериалы" tvg-id="hollywood-hd",Hollywood HD
+udp://@239.1.1.22:1234
+#EXTINF:119 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/bolt.png" tvg-id="bolt",Bolt HD
+udp://@239.1.1.37:1234
+#EXTINF:120 group-title="Фильмы и сериалы" tvg-id="star-cinema",Star Cinema
+udp://@239.1.1.35:1234
+#EXTINF:121 group-title="Фильмы и сериалы" tvg-id="cinema-ru",Cinema
+udp://@239.1.1.48:1234
+#EXTINF:122 group-title="Фильмы и сериалы" tvg-id="lubimoe-kino",Любимое кино
+udp://@239.1.20.10:1234
+#EXTINF:123 group-title="Фильмы и сериалы" tvg-id="domkino",Дом кино
+udp://@239.1.4.8:1234
+#EXTINF:124 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/filmbox-ru.png" tvg-id="filmbox-ru",FilmBox Russia
+udp://@239.1.20.75:1234
+#EXTINF:125 group-title="Фильмы и сериалы" tvg-id="filmbox-arthouse",Filmbox Arthouse
+udp://@239.1.20.77:1234
+#EXTINF:126 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/zee-tv.png" tvg-id="zee-tv",Индия
+udp://@239.1.21.29:1234
+#EXTINF:127 group-title="Фильмы и сериалы" tvg-id="evrokino",Еврокино
+udp://@239.1.21.15:1234
+#EXTINF:128 group-title="Фильмы и сериалы" tvg-id="russky-illuzion",Русский Иллюзион
+udp://@239.1.4.11:1234
+#EXTINF:129 group-title="Фильмы и сериалы" tvg-id="russky-detektiv",Русский Детектив
+udp://@239.1.4.16:1234
+#EXTINF:130 group-title="Фильмы и сериалы" tvg-id="russky-bestseller",Русский Бестселлер
+udp://@239.1.4.2:1234
+#EXTINF:131 group-title="Фильмы и сериалы" tvg-id="russky-roman",Русский Роман
+udp://@239.1.3.17:1234
+#EXTINF:132 group-title="Фильмы и сериалы" tvg-id="illuzion-plus",Иллюзион+
+udp://@239.1.21.19:1234
+#EXTINF:133 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/tvxxi.png" tvg-id="tvxxi",ТВ 21
+udp://@239.1.4.1:1234
+#EXTINF:134 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/start-world.png" tvg-id="start-world",START WORLD HD
+udp://@239.1.1.66:1234
+#EXTINF:135 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/start-air.png" tvg-id="start-air",START AIR HD
+udp://@239.1.1.65:1234
+#EXTINF:136 group-title="Фильмы и сериалы" tvg-id="fanhd",FAN
+udp://@239.1.21.52:1234
+#EXTINF:137 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/malysh.png" tvg-id="malysh",Супергерои
+udp://@239.1.21.83:1234
+#EXTINF:138 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/malysh.png" tvg-id="malysh",Супергерои HD
+udp://@239.1.1.69:1234
+#EXTINF:140 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/kineko.png" tvg-id="kineko",Кинеко HD
+udp://@239.1.1.57:1234
+#EXTINF:141 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sapfir.png" tvg-id="sapfir",Сапфир
+udp://@239.1.1.60:1234
+#EXTINF:142 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/sapfir.png" tvg-id="sapfir",Сапфир HD
+udp://@239.1.1.56:1234
+#EXTINF:143 group-title="Фильмы и сериалы" tvg-id="dorama",Дорама
+udp://@239.1.1.50:1234
+#EXTINF:144 group-title="Фильмы и сериалы" tvg-id="amedia1",A1 HD
+udp://@239.1.1.76:1234
+#EXTINF:145 group-title="Фильмы и сериалы" tvg-id="amedia-premium",AMEDIA PREMIUM HD
+udp://@239.1.14.1:1234
+#EXTINF:146 group-title="Фильмы и сериалы" tvg-id="amedia-hit",Amedia Hit HD
+udp://@239.1.21.14:1234
+#EXTINF:147 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/amedia2.png" tvg-id="amedia2",Amedia 2
+udp://@239.1.20.65:1234
+#EXTINF:148 group-title="Фильмы и сериалы" tvg-id="simpleTVFakeEpgId",DIZI
+udp://@239.1.20.16:1234
+#EXTINF:149 group-title="Фильмы и сериалы" tvg-id="ginger-hd",Капитан фантастика HD
+udp://@239.1.21.21:1234
+#EXTINF:190 group-title="Музыка" tvg-id="bridge-tv",Bridge TV
+udp://@239.1.8.8:1234
+#EXTINF:150 group-title="Фильмы и сериалы" tvg-logo="https://epgx.site/p/kino-bez-granic.png" tvg-id="kino-bez-granic",Кино без границ
+https://hls.peers.tv/streaming/kino_bez_granits/16/vh1w/playlist.m3u8
+#EXTINF:191 group-title="Музыка" tvg-id="bridge-tv-classic",Bridge TV Classic
+udp://@239.1.20.106:1234
+#EXTINF:151 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/kino-24.png" tvg-id="kino-24",Kino 24
+https://hls.peers.tv/streaming/kino24/126/vh1w/playlist.m3u8
+#EXTINF:192 group-title="Музыка" tvg-id="bridge-tv-ruxit",Bridge TV Русский хит
+udp://@239.1.8.14:1234
+#EXTINF:193 group-title="Музыка" tvg-id="mezzo-live-hd",Mezzo LIVE
+udp://@239.1.10.1:1234
+#EXTINF:194 group-title="Музыка" tvg-id="simpleTVFakeEpgId",MUSIC BOX RUSSIA
+udp://@239.1.8.5:1234
+#EXTINF:195 group-title="Музыка" tvg-id="europa-plus-tv",EUROPA PLUS TV
+udp://@239.1.8.10:1234
+#EXTINF:196 group-title="Музыка" tvg-id="simpleTVFakeEpgId",1HD
+udp://@239.1.1.67:1234
+#EXTINF:197 group-title="Музыка" tvg-id="simpleTVFakeEpgId",Шансон ТВ
+udp://@239.1.8.12:1234
+#EXTINF:198 group-title="Музыка" tvg-id="simpleTVFakeEpgId",RU TV
+udp://@239.1.8.4:1234
+#EXTINF:199 group-title="Музыка" tvg-id="simpleTVFakeEpgId",RU TV HD
+udp://@239.1.1.74:1234
+#EXTINF:200 group-title="Музыка" tvg-id="muztv",МУЗ ТВ
+udp://@239.1.15.13:1234
+#EXTINF:201 group-title="Музыка" tvg-id="o2tv",О2ТВ
+udp://@239.1.21.54:1234
+#EXTINF:202 group-title="Музыка" tvg-id="la-minor",Ля минор
+udp://@239.1.8.13:1234
+#EXTINF:203 group-title="Музыка" tvg-id="tnt-music",ТНТ MUSIC
+udp://@239.1.8.2:1234
+#EXTINF:204 group-title="Музыка" tvg-id="muzyka-pervogo",Музыка первого
+udp://@239.1.1.53:1234
+#EXTINF:205 group-title="Международные" tvg-id="simpleTVFakeEpgId",Arirang World
+udp://@239.1.21.6:1234
+#EXTINF:206 group-title="Международные" tvg-logo="https://iptvx.one/picons/silkway.png" tvg-id="silkway",Silk Way
+udp://@239.1.21.72:1234
+#EXTINF:207 group-title="Международные" tvg-id="simpleTVFakeEpgId",CCTV4 EUROP
+udp://@239.1.1.10:1234
+#EXTINF:208 group-title="Международные" tvg-id="simpleTVFakeEpgId",CGTN ESPAÑOL
+udp://@239.1.1.19:1234
+#EXTINF:209 group-title="Международные" tvg-id="shant-premium-hd",SHANT PREMIUM
+udp://@239.1.1.12:1234
+#EXTINF:210 group-title="Международные" tvg-id="belarus24",Беларусь 24
+udp://@239.1.21.1:1234
+#EXTINF:211 group-title="Relax" tvg-id="simpleTVFakeEpgId",Jacob + Katie Schwarz
+udp://@239.1.22.3:1234
+#EXTINF:212 group-title="Relax" tvg-id="home-4k",HOME 4k
+udp://@239.1.22.4:1234
+#EXTINF:213 group-title="Relax" tvg-id="nasha-sibir",Наша Сибирь HD
+udp://@239.1.9.7:1234
+#EXTINF:152 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/cartoon-classics.png" tvg-id="cartoon-classics",Cartoon Classics
+udp://@239.1.1.90:1234
+#EXTINF:153 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/suspense.png" tvg-id="suspense",Suspense
+udp://@239.1.1.89:1234
+#EXTINF:154 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/romance.png" tvg-id="romance",Romance
+udp://@239.1.1.88:1234
+#EXTINF:155 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/vhs-ka.png" tvg-id="vhs-ka",VHS-ка
+udp://@239.1.1.87:1234
+#EXTINF:156 group-title="Фильмы и сериалы" tvg-logo="https://iptvx.one/picons/plan-b.png" tvg-id="plan-b",Plan B
+udp://@239.1.1.86:1234
+#EXTINF:214 group-title="Relax" tvg-id="simpleTVFakeEpgId",1 - Service01
+udp://@239.1.22.2:1234
+#EXTINF:81 group-title="Эфир" tvg-logo="https://iptvx.one/picons/dzenzhinsk-tv.png" tvg-id="dzenzhinsk-tv",Дзержинск ТВ HD
+udp://@239.1.20.11:1234
+#EXTINF:82 group-title="Эфир" tvg-logo="https://iptvx.one/picons/nts-irkutsk.png" tvg-id="nts-irkutsk",НТС (Иркутск)
+udp://@239.1.20.121:1234
+#EXTINF:-1 group-title="Эфир" tvg-logo="https://iptvx.one/picons/myy.png" tvg-id="myy",МЫ
+udp://@239.1.1.100:1234
+#EXTINF:-1 group-title="Познавательные" tvg-logo="https://iptvx.one/picons/epic.png" tvg-id="epic",epic
+udp://@239.1.1.98:1234
+#EXTINF:-1 group-title="Эфир" tvg-id="simpleTVFakeEpgId",ОТР HD
+udp://@239.1.1.97:1234
+#EXTINF:-1 group-title="Эфир" tvg-id="simpleTVFakeEpgId",Мир HD
+udp://@239.1.1.96:1234
+#EXTINF:-1 group-title="Эфир" tvg-logo="https://iptvx.one/picons/tv3-ru.png" tvg-id="tv3-ru",ТВ-3 HD
+udp://@239.1.1.95:1234
+#EXTINF:-1 group-title="Scanned channels" tvg-id="simpleTVFakeEpgId",Пятница HD
+udp://@239.1.1.94:1234
+#EXTINF:-1 group-title="Scanned channels" tvg-id="simpleTVFakeEpgId",Домашний HD
+udp://@239.1.1.93:1234
+#EXTINF:-1 group-title="Эфир" tvg-logo="https://iptvx.one/picons/sts-pl4.png" tvg-id="sts-pl4",СТС (+4) HD
+udp://@239.1.1.92:1234
+#EXTINF:-1 group-title="Международные" tvg-id="kbs-world",KBS World
+udp://@239.1.1.77:1234
+#EXTINF:-1 group-title="Познавательные" tvg-logo="https://iptvx.one/picons/kuxnia-tv.png" tvg-id="kuxnia-tv",Кухня ТВ
+udp://@239.1.2.15:1234
+#EXTINF:-1 group-title="Фильмы и сериалы" tvg-logo="https://epg.iptvx.one/picons/kinosat.png" tvg-id="kinosat",Киносат
+https://hls.peers.tv/streaming/kinosat/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Познавательные" tvg-logo="https://iptvx.one/picons/the-explorers.png" tvg-id="the-explorers",The Explorers
+https://hls.peers.tv/streaming/the_explorers/16/tvrecw/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы и сериалы" tvg-id="mir-seriala",Мир сериала
+https://hls.peers.tv/streaming/mir_seriala/126/tvrec/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы и сериалы" tvg-id="tayna",Тайна
+https://hls.peers.tv/streaming/tayna/16/copy_a/playlist.m3u8
+#EXTINF:-1 group-title="Фильмы и сериалы" tvg-logo="https://epg.iptvx.one/picons/animetv.png" tvg-id="animetv",Anime TV
+https://hls.peers.tv/streaming/animetv/16/copy/playlist.m3u8
+#EXTINF:-1 group-title="Эфир" tvg-id="centralnoye-tv",Центральное телевидение
+https://hls.peers.tv/streaming/tvc_ctv/126/tvrecw/playlist.m3u8
